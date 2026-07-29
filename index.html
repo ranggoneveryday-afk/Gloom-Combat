@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Gloomy Hamster Gold ($GLOOM) - Tap Game</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gloomy Hamster Gold - Telegram Mini App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -12,13 +12,13 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             user-select: none;
             -webkit-user-select: none;
         }
 
         body {
-            background-color: #0b0d14;
+            background-color: #07090e;
             color: #ffffff;
             display: flex;
             justify-content: center;
@@ -27,11 +27,11 @@
             overflow: hidden;
         }
 
-        .game-card {
+        .app-container {
             width: 100%;
-            max-width: 420px;
+            max-width: 430px;
             height: 100vh;
-            background: radial-gradient(circle at top, #1a1e2e 0%, #0b0d14 80%);
+            background: radial-gradient(circle at 50% 10%, #1e1b2e 0%, #08090d 70%);
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -39,194 +39,372 @@
             position: relative;
         }
 
-        /* Top Header Stats */
-        .stats-header {
+        /* Glow Effect Background */
+        .ambient-glow {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.25) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Header Info Status */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-radius: 20px;
+            z-index: 2;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #000;
+        }
+
+        .user-info .name {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .user-info .rank {
+            font-size: 0.7rem;
+            color: #f1c40f;
+            font-weight: 600;
+        }
+
+        /* Top Cards Info */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            margin-top: 10px;
+            margin-top: 15px;
+            z-index: 2;
         }
 
-        .stat-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(241, 196, 15, 0.2);
-            border-radius: 12px;
-            padding: 8px;
+        .stat-card {
+            background: rgba(20, 24, 38, 0.7);
+            border: 1px solid rgba(241, 196, 15, 0.15);
+            border-radius: 14px;
+            padding: 10px 6px;
             text-align: center;
         }
 
-        .stat-box .title {
+        .stat-card .label {
             font-size: 0.65rem;
-            color: #8a90a2;
+            color: #8b92a5;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
 
-        .stat-box .value {
-            font-size: 0.85rem;
-            font-weight: 700;
+        .stat-card .val {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 800;
             color: #f1c40f;
         }
 
-        /* Balance Section */
-        .balance-section {
+        /* Balance Display */
+        .balance-box {
             text-align: center;
-            margin: 15px 0;
+            margin: 20px 0 10px 0;
+            z-index: 2;
         }
 
-        .balance-title {
-            font-size: 0.8rem;
-            color: #a0a5b5;
+        .balance-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #8b92a5;
+            font-weight: 700;
         }
 
-        .balance-amount {
+        .balance-value {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.8rem;
+            font-size: 3.2rem;
             font-weight: 900;
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .balance-amount i {
-            color: #f1c40f;
-            filter: drop-shadow(0 0 10px #f1c40f);
+        .coin-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #ffe066, #f39c12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.6);
+            color: #000;
+            font-size: 1.4rem;
         }
 
-        /* Main Clicker Circle */
-        .tap-container {
-            position: relative;
+        /* Interactive Clicker Circle */
+        .clicker-area {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: auto 0;
+            position: relative;
+            z-index: 2;
         }
 
-        .tap-circle {
-            width: 240px;
-            height: 240px;
+        .circle-outer {
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
-            background: linear-gradient(145deg, #1e2436, #121522);
-            border: 6px solid #f39c12;
-            box-shadow: 0 0 40px rgba(243, 156, 18, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
+            background: linear-gradient(145deg, rgba(243, 156, 18, 0.2), rgba(0,0,0,0.4));
+            padding: 10px;
+            box-shadow: 0 0 35px rgba(243, 156, 18, 0.25);
+            cursor: pointer;
+            transition: transform 0.08s cubic-bezier(0, 0, 0.2, 1);
+        }
+
+        .circle-outer:active {
+            transform: scale(0.94);
+        }
+
+        .circle-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #121522;
+            border: 4px solid #f39c12;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
-            transition: transform 0.05s ease;
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+            position: relative;
+            overflow: hidden;
         }
 
-        .tap-circle:active {
-            transform: scale(0.95);
+        .hamster-avatar-svg {
+            width: 140px;
+            height: 140px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
         }
 
-        .tap-circle img {
-            width: 85%;
-            height: 85%;
-            object-fit: cover;
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        /* Floating Number Animation (+1, +2, etc) */
-        .floating-text {
+        /* Floating +1 Numbers */
+        .tap-pop {
             position: absolute;
             font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 900;
-            color: #f1c40f;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            color: #ffe066;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
             pointer-events: none;
-            animation: floatUp 0.8s ease-out forwards;
+            animation: popUp 0.7s cubic-bezier(0, 0, 0.2, 1) forwards;
+            z-index: 10;
         }
 
-        @keyframes floatUp {
+        @keyframes popUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-80px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-70px) scale(1.3); }
         }
 
-        /* Energy & Boost Footer */
-        .footer-controls {
+        /* Bottom Controls & Navigation */
+        .bottom-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 2;
+        }
+
+        .energy-bar-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.05);
-            padding: 12px 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .energy-info {
+        .energy-text {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 700;
+            gap: 8px;
+            font-weight: 800;
             color: #f1c40f;
+            font-size: 0.9rem;
         }
 
         .boost-btn {
             background: linear-gradient(90deg, #f39c12, #e67e22);
-            color: #fff;
+            color: #000;
             border: none;
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.75rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
-        .boost-btn:active {
-            transform: scale(0.95);
+        .nav-menu {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            background: rgba(15, 18, 28, 0.9);
+            padding: 8px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 0;
+            color: #6c757d;
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+
+        .nav-item.active {
+            color: #f1c40f;
+            background: rgba(241, 196, 15, 0.1);
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
 
-    <div class="game-card">
-        <!-- Top Stats -->
-        <div class="stats-header">
-            <div class="stat-box">
-                <div class="title">Earn per tap</div>
-                <div class="value" id="perTapVal">+1</div>
+    <div class="app-container">
+        <div class="ambient-glow"></div>
+
+        <!-- Top Header -->
+        <div class="header-section">
+            <div class="user-profile">
+                <div class="avatar">T</div>
+                <div class="user-info">
+                    <div class="name">Tuan (CEO)</div>
+                    <div class="rank"><i class="fa-solid fa-crown"></i> Gloom Master</div>
+                </div>
             </div>
-            <div class="stat-box">
-                <div class="title">Coins to level</div>
-                <div class="value">50K</div>
+            <div style="font-size: 0.75rem; color: #8b92a5; font-weight: 700;">SOLANA</div>
+        </div>
+
+        <!-- Top Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label">Per Ketukan</div>
+                <div class="val" id="perTapVal">+1</div>
             </div>
-            <div class="stat-box">
-                <div class="title">Profit per hour</div>
-                <div class="value">+0</div>
+            <div class="stat-card">
+                <div class="label">Naik Level</div>
+                <div class="val">50K</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Profit / Jam</div>
+                <div class="val">+0</div>
             </div>
         </div>
 
         <!-- Balance Section -->
-        <div class="balance-section">
-            <div class="balance-title">Total $GLOOM Balance</div>
-            <div class="balance-amount">
-                <i class="fa-solid fa-coins"></i>
+        <div class="balance-box">
+            <div class="balance-label">Total Saldo $GLOOM</div>
+            <div class="balance-value">
+                <div class="coin-icon"><i class="fa-solid fa-coins"></i></div>
                 <span id="score">0</span>
             </div>
         </div>
 
-        <!-- Tap Circle / Hamster Kombat Style -->
-        <div class="tap-container">
-            <div class="tap-circle" id="tapBtn">
-                <!-- Ganti 'logo.png' dengan file gambar logo hamster Tuan -->
-                <img src="logo.png" alt="Gloomy Hamster">
+        <!-- Tap Circle Game -->
+        <div class="clicker-area">
+            <div class="circle-outer" id="tapBtn">
+                <div class="circle-inner">
+                    <!-- SVG Visual Vector Hamster Sedih Bermahkota Emas -->
+                    <svg class="hamster-avatar-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="115" r="55" fill="#D2B48C"/>
+                        <circle cx="65" cy="70" r="18" fill="#D2B48C"/>
+                        <circle cx="65" cy="70" r="10" fill="#FFC0CB"/>
+                        <circle cx="135" cy="70" r="18" fill="#D2B48C"/>
+                        <circle cx="135" cy="70" r="10" fill="#FFC0CB"/>
+                        <circle cx="100" cy="115" r="42" fill="#FFE4C4"/>
+                        <!-- Eyes & Tears -->
+                        <ellipse cx="80" cy="105" rx="9" ry="12" fill="#1A1A1A"/>
+                        <ellipse cx="120" cy="105" rx="9" ry="12" fill="#1A1A1A"/>
+                        <circle cx="77" cy="100" r="4" fill="white"/>
+                        <circle cx="117" cy="100" r="4" fill="white"/>
+                        <path d="M78 118 Q73 130 75 138 Q78 143 82 138 Q84 130 78 118Z" fill="#70D6FF"/>
+                        <!-- Mouth -->
+                        <path d="M93 122 Q100 117 107 122" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
+                        <!-- Crown -->
+                        <path d="M70 62 L80 42 L100 55 L120 42 L130 62 Z" fill="#FFD700" stroke="#DAA520" stroke-width="2"/>
+                        <circle cx="80" cy="42" r="3" fill="#FF0000"/>
+                        <circle cx="100" cy="55" r="3" fill="#00DEF6"/>
+                        <circle cx="120" cy="42" r="3" fill="#FF0000"/>
+                    </svg>
+                </div>
             </div>
         </div>
 
-        <!-- Energy & Upgrade Controls -->
-        <div class="footer-controls">
-            <div class="energy-info">
-                <i class="fa-solid fa-bolt" style="font-size: 1.2rem;"></i>
-                <span id="energy">1000</span> / 1000
+        <!-- Controls & Bottom Bar -->
+        <div class="bottom-nav">
+            <div class="energy-bar-container">
+                <div class="energy-text">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span id="energy">1000</span> / 1000
+                </div>
+                <button class="boost-btn" id="boostBtn">
+                    <i class="fa-solid fa-rocket"></i> Boost (+1)
+                </button>
             </div>
-            <button class="boost-btn" id="boostBtn">
-                <i class="fa-solid fa-rocket"></i> Boost (+1)
-            </button>
+
+            <div class="nav-menu">
+                <div class="nav-item active">
+                    <i class="fa-solid fa-hand-pointer"></i>
+                    <span>Tap</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fa-solid fa-pickaxe"></i>
+                    <span>Mine</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Friends</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Wallet</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -242,55 +420,49 @@
         const tapBtn = document.getElementById('tapBtn');
         const boostBtn = document.getElementById('boostBtn');
 
-        // Fungsi saat Karakter Diketuk (Tap)
         tapBtn.addEventListener('click', (e) => {
             if (energy >= perTap) {
-                // Tambah Skor & Kurangi Energi
                 score += perTap;
                 energy -= perTap;
                 
                 scoreEl.innerText = score.toLocaleString();
                 energyEl.innerText = energy;
 
-                // Animasi Teks Angka Melayang (+1, +2)
-                createFloatingText(e.clientX, e.clientY, `+${perTap}`);
+                createPop(e.clientX, e.clientY, `+${perTap}`);
             }
         });
 
-        // Buat Teks Angka Melayang
-        function createFloatingText(x, y, text) {
-            const floatEl = document.createElement('div');
-            floatEl.classList.add('floating-text');
-            floatEl.innerText = text;
+        function createPop(x, y, text) {
+            const pop = document.createElement('div');
+            pop.classList.add('tap-pop');
+            pop.innerText = text;
             
-            // Posisikan tepat di mana jari menekan
-            floatEl.style.left = `${x - 15}px`;
-            floatEl.style.top = `${y - 30}px`;
+            // Posisi pas di titik sentuh jari
+            pop.style.left = `${x - 20}px`;
+            pop.style.top = `${y - 40}px`;
 
-            document.body.appendChild(floatEl);
+            document.body.appendChild(pop);
 
             setTimeout(() => {
-                floatEl.remove();
-            }, 800);
+                pop.remove();
+            }, 700);
         }
 
-        // Fitur Boost (Multitap Level Up)
         boostBtn.addEventListener('click', () => {
-            if (score >= 20) {
-                score -= 20;
+            if (score >= 30) {
+                score -= 30;
                 perTap += 1;
                 scoreEl.innerText = score.toLocaleString();
                 perTapValEl.innerText = `+${perTap}`;
-                alert(`Boost Success! Now earning +${perTap} per tap.`);
             } else {
-                alert("Need at least 20 $GLOOM coins to upgrade boost!");
+                alert("Butuh minimal 30 $GLOOM untuk upgrade!");
             }
         });
 
-        // Regenerasi Energi Otomatis (+2 per detik)
+        // Isi ulang energi otomatis
         setInterval(() => {
             if (energy < maxEnergy) {
-                energy = Math.min(maxEnergy, energy + 2);
+                energy = Math.min(maxEnergy, energy + 3);
                 energyEl.innerText = energy;
             }
         }, 1000);
