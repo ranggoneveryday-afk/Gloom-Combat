@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Gloomy Hamster Gold ($GLOOM) - Tap Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background-color: #0b0d14;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .game-card {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            background: radial-gradient(circle at top, #1a1e2e 0%, #0b0d14 80%);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        /* Top Header Stats */
+        .stats-header {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(241, 196, 15, 0.2);
+            border-radius: 12px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .stat-box .title {
+            font-size: 0.65rem;
+            color: #8a90a2;
+        }
+
+        .stat-box .value {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #f1c40f;
+        }
+
+        /* Balance Section */
+        .balance-section {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .balance-title {
+            font-size: 0.8rem;
+            color: #a0a5b5;
+        }
+
+        .balance-amount {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .balance-amount i {
+            color: #f1c40f;
+            filter: drop-shadow(0 0 10px #f1c40f);
+        }
+
+        /* Main Clicker Circle */
+        .tap-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto 0;
+        }
+
+        .tap-circle {
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1e2436, #121522);
+            border: 6px solid #f39c12;
+            box-shadow: 0 0 40px rgba(243, 156, 18, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.05s ease;
+        }
+
+        .tap-circle:active {
+            transform: scale(0.95);
+        }
+
+        .tap-circle img {
+            width: 85%;
+            height: 85%;
+            object-fit: cover;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Floating Number Animation (+1, +2, etc) */
+        .floating-text {
+            position: absolute;
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #f1c40f;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1.2); }
+        }
+
+        /* Energy & Boost Footer */
+        .footer-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .energy-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: #f1c40f;
+        }
+
+        .boost-btn {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .boost-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-card">
+        <!-- Top Stats -->
+        <div class="stats-header">
+            <div class="stat-box">
+                <div class="title">Earn per tap</div>
+                <div class="value" id="perTapVal">+1</div>
+            </div>
+            <div class="stat-box">
+                <div class="title">Coins to level</div>
+                <div class="value">50K</div>
+            </div>
+            <div class="stat-box">
+                <div class="title">Profit per hour</div>
+                <div class="value">+0</div>
+            </div>
+        </div>
+
+        <!-- Balance Section -->
+        <div class="balance-section">
+            <div class="balance-title">Total $GLOOM Balance</div>
+            <div class="balance-amount">
+                <i class="fa-solid fa-coins"></i>
+                <span id="score">0</span>
+            </div>
+        </div>
+
+        <!-- Tap Circle / Hamster Kombat Style -->
+        <div class="tap-container">
+            <div class="tap-circle" id="tapBtn">
+                <!-- Ganti 'logo.png' dengan file gambar logo hamster Tuan -->
+                <img src="logo.png" alt="Gloomy Hamster">
+            </div>
+        </div>
+
+        <!-- Energy & Upgrade Controls -->
+        <div class="footer-controls">
+            <div class="energy-info">
+                <i class="fa-solid fa-bolt" style="font-size: 1.2rem;"></i>
+                <span id="energy">1000</span> / 1000
+            </div>
+            <button class="boost-btn" id="boostBtn">
+                <i class="fa-solid fa-rocket"></i> Boost (+1)
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let perTap = 1;
+        let energy = 1000;
+        const maxEnergy = 1000;
+
+        const scoreEl = document.getElementById('score');
+        const energyEl = document.getElementById('energy');
+        const perTapValEl = document.getElementById('perTapVal');
+        const tapBtn = document.getElementById('tapBtn');
+        const boostBtn = document.getElementById('boostBtn');
+
+        // Fungsi saat Karakter Diketuk (Tap)
+        tapBtn.addEventListener('click', (e) => {
+            if (energy >= perTap) {
+                // Tambah Skor & Kurangi Energi
+                score += perTap;
+                energy -= perTap;
+                
+                scoreEl.innerText = score.toLocaleString();
+                energyEl.innerText = energy;
+
+                // Animasi Teks Angka Melayang (+1, +2)
+                createFloatingText(e.clientX, e.clientY, `+${perTap}`);
+            }
+        });
+
+        // Buat Teks Angka Melayang
+        function createFloatingText(x, y, text) {
+            const floatEl = document.createElement('div');
+            floatEl.classList.add('floating-text');
+            floatEl.innerText = text;
+            
+            // Posisikan tepat di mana jari menekan
+            floatEl.style.left = `${x - 15}px`;
+            floatEl.style.top = `${y - 30}px`;
+
+            document.body.appendChild(floatEl);
+
+            setTimeout(() => {
+                floatEl.remove();
+            }, 800);
+        }
+
+        // Fitur Boost (Multitap Level Up)
+        boostBtn.addEventListener('click', () => {
+            if (score >= 20) {
+                score -= 20;
+                perTap += 1;
+                scoreEl.innerText = score.toLocaleString();
+                perTapValEl.innerText = `+${perTap}`;
+                alert(`Boost Success! Now earning +${perTap} per tap.`);
+            } else {
+                alert("Need at least 20 $GLOOM coins to upgrade boost!");
+            }
+        });
+
+        // Regenerasi Energi Otomatis (+2 per detik)
+        setInterval(() => {
+            if (energy < maxEnergy) {
+                energy = Math.min(maxEnergy, energy + 2);
+                energyEl.innerText = energy;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
