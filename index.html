@@ -15,6 +15,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             user-select: none;
             -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
         body {
@@ -32,27 +33,26 @@
             max-width: 430px;
             height: 100vh;
             background: radial-gradient(circle at 50% 10%, #1e1b2e 0%, #08090d 70%);
-            padding: 20px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
         }
 
-        /* Glow Effect Background */
         .ambient-glow {
             position: absolute;
             top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 260px;
-            height: 260px;
-            background: radial-gradient(circle, rgba(243, 156, 18, 0.25) 0%, rgba(0,0,0,0) 70%);
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.22) 0%, rgba(0,0,0,0) 70%);
             z-index: 1;
             pointer-events: none;
         }
 
-        /* Header Info Status */
+        /* Header Section */
         .header-section {
             display: flex;
             justify-content: space-between;
@@ -60,8 +60,8 @@
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
-            padding: 12px 16px;
-            border-radius: 20px;
+            padding: 10px 14px;
+            border-radius: 18px;
             z-index: 2;
         }
 
@@ -94,12 +94,12 @@
             font-weight: 600;
         }
 
-        /* Top Cards Info */
+        /* Top Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            margin-top: 15px;
+            margin-top: 12px;
             z-index: 2;
         }
 
@@ -107,33 +107,47 @@
             background: rgba(20, 24, 38, 0.7);
             border: 1px solid rgba(241, 196, 15, 0.15);
             border-radius: 14px;
-            padding: 10px 6px;
+            padding: 8px 4px;
             text-align: center;
         }
 
         .stat-card .label {
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             color: #8b92a5;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .stat-card .val {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 800;
             color: #f1c40f;
+        }
+
+        /* Tab Content Pages */
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .tab-content.active {
+            display: flex;
         }
 
         /* Balance Display */
         .balance-box {
             text-align: center;
-            margin: 20px 0 10px 0;
-            z-index: 2;
+            margin: 10px 0 5px 0;
         }
 
         .balance-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 1.5px;
             color: #8b92a5;
@@ -142,19 +156,18 @@
 
         .balance-value {
             font-family: 'Outfit', sans-serif;
-            font-size: 3.2rem;
+            font-size: 3rem;
             font-weight: 900;
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            gap: 10px;
         }
 
         .coin-icon {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #ffe066, #f39c12);
             border-radius: 50%;
             display: flex;
@@ -162,56 +175,54 @@
             justify-content: center;
             box-shadow: 0 0 15px rgba(243, 156, 18, 0.6);
             color: #000;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
         }
 
-        /* Interactive Clicker Circle */
+        /* Clicker Area */
         .clicker-area {
             display: flex;
             justify-content: center;
             align-items: center;
             margin: auto 0;
             position: relative;
-            z-index: 2;
         }
 
         .circle-outer {
-            width: 250px;
-            height: 250px;
+            width: 260px;
+            height: 260px;
             border-radius: 50%;
-            background: linear-gradient(145deg, rgba(243, 156, 18, 0.2), rgba(0,0,0,0.4));
-            padding: 10px;
+            background: linear-gradient(145deg, rgba(243, 156, 18, 0.25), rgba(0,0,0,0.5));
+            padding: 8px;
             box-shadow: 0 0 35px rgba(243, 156, 18, 0.25);
             cursor: pointer;
-            transition: transform 0.08s cubic-bezier(0, 0, 0.2, 1);
+            transition: transform 0.05s ease;
         }
 
         .circle-outer:active {
-            transform: scale(0.94);
+            transform: scale(0.95);
         }
 
         .circle-inner {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: #121522;
+            background: #0f121d;
             border: 4px solid #f39c12;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
             position: relative;
             overflow: hidden;
         }
 
-        .hamster-avatar-svg {
-            width: 140px;
-            height: 140px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+        .hamster-fullbody-svg {
+            width: 180px;
+            height: 180px;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
         }
 
-        /* Floating +1 Numbers */
+        /* Floating Pop Text */
         .tap-pop {
             position: absolute;
             font-family: 'Outfit', sans-serif;
@@ -220,8 +231,8 @@
             color: #ffe066;
             text-shadow: 0 2px 10px rgba(0,0,0,0.9);
             pointer-events: none;
-            animation: popUp 0.7s cubic-bezier(0, 0, 0.2, 1) forwards;
-            z-index: 10;
+            animation: popUp 0.6s cubic-bezier(0, 0, 0.2, 1) forwards;
+            z-index: 100;
         }
 
         @keyframes popUp {
@@ -229,11 +240,47 @@
             100% { opacity: 0; transform: translateY(-70px) scale(1.3); }
         }
 
-        /* Bottom Controls & Navigation */
-        .bottom-nav {
+        /* Cards Page Styling (Mine, Friends, Wallet) */
+        .page-card {
+            background: rgba(20, 24, 38, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 16px;
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .page-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            color: #f1c40f;
+            margin-bottom: 8px;
+        }
+
+        .page-desc {
+            font-size: 0.8rem;
+            color: #8b92a5;
+            margin-bottom: 12px;
+        }
+
+        .action-btn-card {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            color: #000;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Bottom Energy Bar & Navigation */
+        .bottom-section {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             z-index: 2;
         }
 
@@ -242,7 +289,7 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.05);
-            padding: 10px 16px;
+            padding: 8px 14px;
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
@@ -253,7 +300,7 @@
             gap: 8px;
             font-weight: 800;
             color: #f1c40f;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .boost-btn {
@@ -273,11 +320,11 @@
         .nav-menu {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            background: rgba(15, 18, 28, 0.9);
-            padding: 8px;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            gap: 6px;
+            background: rgba(15, 18, 28, 0.95);
+            padding: 6px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .nav-item {
@@ -291,11 +338,12 @@
             font-weight: 700;
             cursor: pointer;
             border-radius: 12px;
+            transition: all 0.2s ease;
         }
 
         .nav-item.active {
             color: #f1c40f;
-            background: rgba(241, 196, 15, 0.1);
+            background: rgba(241, 196, 15, 0.12);
         }
 
         .nav-item i {
@@ -332,51 +380,91 @@
             </div>
             <div class="stat-card">
                 <div class="label">Profit / Jam</div>
-                <div class="val">+0</div>
+                <div class="val" id="profitPerHourVal">+0</div>
             </div>
         </div>
 
-        <!-- Balance Section -->
-        <div class="balance-box">
-            <div class="balance-label">Total Saldo $GLOOM</div>
-            <div class="balance-value">
-                <div class="coin-icon"><i class="fa-solid fa-coins"></i></div>
-                <span id="score">0</span>
+        <!-- TAB 1: MAIN GAME (TAP) -->
+        <div class="tab-content active" id="tab-tap">
+            <div class="balance-box">
+                <div class="balance-label">Total Saldo $GLOOM</div>
+                <div class="balance-value">
+                    <div class="coin-icon"><i class="fa-solid fa-coins"></i></div>
+                    <span id="score">0</span>
+                </div>
             </div>
-        </div>
 
-        <!-- Tap Circle Game -->
-        <div class="clicker-area">
-            <div class="circle-outer" id="tapBtn">
-                <div class="circle-inner">
-                    <!-- SVG Visual Vector Hamster Sedih Bermahkota Emas -->
-                    <svg class="hamster-avatar-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="100" cy="115" r="55" fill="#D2B48C"/>
-                        <circle cx="65" cy="70" r="18" fill="#D2B48C"/>
-                        <circle cx="65" cy="70" r="10" fill="#FFC0CB"/>
-                        <circle cx="135" cy="70" r="18" fill="#D2B48C"/>
-                        <circle cx="135" cy="70" r="10" fill="#FFC0CB"/>
-                        <circle cx="100" cy="115" r="42" fill="#FFE4C4"/>
-                        <!-- Eyes & Tears -->
-                        <ellipse cx="80" cy="105" rx="9" ry="12" fill="#1A1A1A"/>
-                        <ellipse cx="120" cy="105" rx="9" ry="12" fill="#1A1A1A"/>
-                        <circle cx="77" cy="100" r="4" fill="white"/>
-                        <circle cx="117" cy="100" r="4" fill="white"/>
-                        <path d="M78 118 Q73 130 75 138 Q78 143 82 138 Q84 130 78 118Z" fill="#70D6FF"/>
-                        <!-- Mouth -->
-                        <path d="M93 122 Q100 117 107 122" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
-                        <!-- Crown -->
-                        <path d="M70 62 L80 42 L100 55 L120 42 L130 62 Z" fill="#FFD700" stroke="#DAA520" stroke-width="2"/>
-                        <circle cx="80" cy="42" r="3" fill="#FF0000"/>
-                        <circle cx="100" cy="55" r="3" fill="#00DEF6"/>
-                        <circle cx="120" cy="42" r="3" fill="#FF0000"/>
-                    </svg>
+            <div class="clicker-area">
+                <div class="circle-outer" id="tapBtn">
+                    <div class="circle-inner">
+                        <!-- SVG HD Hamster 1 Badan (Fullbody Business Suit + Crown) -->
+                        <svg class="hamster-fullbody-svg" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Ears -->
+                            <circle cx="60" cy="50" r="20" fill="#D2B48C"/>
+                            <circle cx="60" cy="50" r="11" fill="#FFC0CB"/>
+                            <circle cx="140" cy="50" r="20" fill="#D2B48C"/>
+                            <circle cx="140" cy="50" r="11" fill="#FFC0CB"/>
+                            <!-- Head -->
+                            <circle cx="100" cy="85" r="48" fill="#D2B48C"/>
+                            <circle cx="100" cy="90" r="36" fill="#FFE4C4"/>
+                            <!-- Eyes & Sad Tears -->
+                            <ellipse cx="80" cy="80" rx="8" ry="11" fill="#1A1A1A"/>
+                            <ellipse cx="120" cy="80" rx="8" ry="11" fill="#1A1A1A"/>
+                            <circle cx="77" cy="76" r="3.5" fill="white"/>
+                            <circle cx="117" cy="76" r="3.5" fill="white"/>
+                            <path d="M78 92 Q73 104 75 110 Q78 114 81 110 Q83 104 78 92Z" fill="#70D6FF"/>
+                            <!-- Nose & Mouth -->
+                            <polygon points="96,93 104,93 100,98" fill="#FFB6C1"/>
+                            <path d="M93 103 Q100 98 107 103" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
+                            <!-- Crown -->
+                            <path d="M72 45 L82 25 L100 38 L118 25 L128 45 Z" fill="#FFD700" stroke="#DAA520" stroke-width="2"/>
+                            <circle cx="82" cy="25" r="3" fill="#FF0000"/>
+                            <circle cx="100" cy="38" r="3" fill="#00DEF6"/>
+                            <circle cx="118" cy="25" r="3" fill="#FF0000"/>
+                            <!-- Body / Business Suit -->
+                            <path d="M60 130 C60 120, 140 120, 140 130 L150 200 C150 210, 50 210, 50 200 Z" fill="#1E2330"/>
+                            <!-- Suit Shirt & Red Tie -->
+                            <polygon points="100,130 85,155 115,155" fill="#FFFFFF"/>
+                            <polygon points="100,135 95,185 100,195 105,185" fill="#E74C3C"/>
+                            <!-- Paws -->
+                            <ellipse cx="52" cy="165" rx="10" ry="14" fill="#D2B48C"/>
+                            <ellipse cx="148" cy="165" rx="10" ry="14" fill="#D2B48C"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- TAB 2: MINE -->
+        <div class="tab-content" id="tab-mine">
+            <div class="page-card">
+                <div class="page-title"><i class="fa-solid fa-pickaxe"></i> Hamster Mining Rig</div>
+                <div class="page-desc">Tingkatkan alat tambang untuk mendapatkan penghasilan pasif $GLOOM secara otomatis setiap jam.</div>
+                <button class="action-btn-card" onclick="buyMiningPass()">Beli Mining Pass (+500 Profit/Jam) - 100 $GLOOM</button>
+            </div>
+        </div>
+
+        <!-- TAB 3: FRIENDS -->
+        <div class="tab-content" id="tab-friends">
+            <div class="page-card">
+                <div class="page-title"><i class="fa-solid fa-users"></i> Undang Teman</div>
+                <div class="page-desc">Dapatkan bonus 2,000 poin $GLOOM untuk setiap teman yang bergabung lewat link referral Tuan.</div>
+                <button class="action-btn-card" onclick="copyInviteLink()"><i class="fa-regular fa-copy"></i> Salin Link Invite</button>
+            </div>
+        </div>
+
+        <!-- TAB 4: WALLET -->
+        <div class="tab-content" id="tab-wallet">
+            <div class="page-card">
+                <div class="page-title"><i class="fa-solid fa-wallet"></i> Solana Wallet</div>
+                <div class="page-desc">Hubungkan dompet Phantom/Solflare Tuan untuk persiapan Airdrop $GLOOM.</div>
+                <button class="action-btn-card" style="margin-bottom: 10px;" onclick="connectWallet()">Connect Phantom Wallet</button>
+                <button class="action-btn-card" style="background: #2a3042; color: #fff;" onclick="copyCA()">Copy Contract Address (CA)</button>
+            </div>
+        </div>
+
         <!-- Controls & Bottom Bar -->
-        <div class="bottom-nav">
+        <div class="bottom-section">
             <div class="energy-bar-container">
                 <div class="energy-text">
                     <i class="fa-solid fa-bolt"></i>
@@ -388,19 +476,19 @@
             </div>
 
             <div class="nav-menu">
-                <div class="nav-item active">
+                <div class="nav-item active" onclick="switchTab('tap', this)">
                     <i class="fa-solid fa-hand-pointer"></i>
                     <span>Tap</span>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" onclick="switchTab('mine', this)">
                     <i class="fa-solid fa-pickaxe"></i>
                     <span>Mine</span>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" onclick="switchTab('friends', this)">
                     <i class="fa-solid fa-users"></i>
                     <span>Friends</span>
                 </div>
-                <div class="nav-item">
+                <div class="nav-item" onclick="switchTab('wallet', this)">
                     <i class="fa-solid fa-wallet"></i>
                     <span>Wallet</span>
                 </div>
@@ -413,13 +501,16 @@
         let perTap = 1;
         let energy = 1000;
         const maxEnergy = 1000;
+        let profitPerHour = 0;
 
         const scoreEl = document.getElementById('score');
         const energyEl = document.getElementById('energy');
         const perTapValEl = document.getElementById('perTapVal');
+        const profitPerHourValEl = document.getElementById('profitPerHourVal');
         const tapBtn = document.getElementById('tapBtn');
         const boostBtn = document.getElementById('boostBtn');
 
+        // Event Tap Utama
         tapBtn.addEventListener('click', (e) => {
             if (energy >= perTap) {
                 score += perTap;
@@ -437,7 +528,6 @@
             pop.classList.add('tap-pop');
             pop.innerText = text;
             
-            // Posisi pas di titik sentuh jari
             pop.style.left = `${x - 20}px`;
             pop.style.top = `${y - 40}px`;
 
@@ -445,9 +535,19 @@
 
             setTimeout(() => {
                 pop.remove();
-            }, 700);
+            }, 600);
         }
 
+        // Switch Tab Navigation
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // Upgrade Boost
         boostBtn.addEventListener('click', () => {
             if (score >= 30) {
                 score -= 30;
@@ -455,15 +555,52 @@
                 scoreEl.innerText = score.toLocaleString();
                 perTapValEl.innerText = `+${perTap}`;
             } else {
-                alert("Butuh minimal 30 $GLOOM untuk upgrade!");
+                alert("Butuh minimal 30 $GLOOM poin untuk upgrade Boost!");
             }
         });
 
-        // Isi ulang energi otomatis
+        // Fitur Tab Mine
+        function buyMiningPass() {
+            if (score >= 100) {
+                score -= 100;
+                profitPerHour += 500;
+                scoreEl.innerText = score.toLocaleString();
+                profitPerHourValEl.innerText = `+${profitPerHour.toLocaleString()}`;
+                alert("Berhasil membeli Mining Pass! +500 Profit/Jam");
+            } else {
+                alert("Butuh minimal 100 $GLOOM poin!");
+            }
+        }
+
+        // Fitur Tab Friends
+        function copyInviteLink() {
+            navigator.clipboard.writeText("https://t.me/GloomCombatbot/app?start=ref123");
+            alert("Link Referral disalin ke clipboard!");
+        }
+
+        // Fitur Tab Wallet
+        function connectWallet() {
+            alert("Sistem integrasi Phantom Wallet akan segera hadir saat Airdrop!");
+        }
+
+        function copyCA() {
+            navigator.clipboard.writeText("MASUKKAN_CA_TUAN_DI_SINI");
+            alert("Contract Address (CA) disalin!");
+        }
+
+        // Regenerasi Energi
         setInterval(() => {
             if (energy < maxEnergy) {
                 energy = Math.min(maxEnergy, energy + 3);
                 energyEl.innerText = energy;
+            }
+        }, 1000);
+
+        // Profit Per Jam Otomatis
+        setInterval(() => {
+            if (profitPerHour > 0) {
+                score += Math.floor(profitPerHour / 3600);
+                scoreEl.innerText = score.toLocaleString();
             }
         }, 1000);
     </script>
