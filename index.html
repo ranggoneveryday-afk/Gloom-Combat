@@ -650,13 +650,15 @@
             }
         }
 
-        let score = 0;
-        let perTap = 1;
-        let energy = 1000;
+        // Variable Game State
+        let score = parseInt(localStorage.getItem('gloom_score')) || 0;
+        let perTap = parseInt(localStorage.getItem('gloom_perTap')) || 1;
+        let energy = parseInt(localStorage.getItem('gloom_energy')) || 1000;
         const maxEnergy = 1000;
-        let profitPerHour = 0;
-        let lastDailyClaim = 0;
-        let userWalletAddress = null;
+        let profitPerHour = parseInt(localStorage.getItem('gloom_profitPerHour')) || 0;
+        let lastDailyClaim = parseInt(localStorage.getItem('gloom_lastDailyClaim')) || 0;
+        let lastSaveTime = parseInt(localStorage.getItem('gloom_lastSaveTime')) || Date.now();
+        let userWalletAddress = localStorage.getItem('gloom_wallet') || null;
 
         const scoreEl = document.getElementById('score');
         const energyEl = document.getElementById('energy');
@@ -665,6 +667,71 @@
         const userRankEl = document.getElementById('userRank');
         const nextRankValEl = document.getElementById('nextRankVal');
         const tapBtn = document.getElementById('tapBtn');
+
+        // Web Audio Synthesizer SFX
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTapSound() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // Haptic Feedback Function
+        function triggerHaptic() {
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            } else if (navigator.vibrate) {
+                navigator.vibrate(25);
+            }
+        }
+
+        // Load Initial Saved Display
+        scoreEl.innerText = score.toLocaleString();
+        perTapValEl.innerText = `+${perTap}`;
+        profitPerHourValEl.innerText = `+${profitPerHour.toLocaleString()}`;
+        energyEl.innerText = energy;
+        if (userWalletAddress) {
+            const shortAddr = userWalletAddress.slice(0, 4) + '...' + userWalletAddress.slice(-4);
+            document.getElementById('walletBtnText').innerText = `Connected: ${shortAddr}`;
+        }
+
+        // Offline Profit Calculator
+        const nowTime = Date.now();
+        const secondsOffline = Math.floor((nowTime - lastSaveTime) / 1000);
+        if (profitPerHour > 0 && secondsOffline > 10) {
+            const offlineEarned = Math.floor((profitPerHour / 3600) * secondsOffline);
+            if (offlineEarned > 0) {
+                score += offlineEarned;
+                scoreEl.innerText = score.toLocaleString();
+                setTimeout(() => {
+                    alert(`Selamat datang kembali Tuan!\n\nHamster Mining Rig Tuan menghasilkan +${offlineEarned.toLocaleString()} $GLOOM saat Tuan offline!`);
+                }, 500);
+            }
+        }
+
+        // Auto Save Function
+        function saveData() {
+            localStorage.setItem('gloom_score', score);
+            localStorage.setItem('gloom_perTap', perTap);
+            localStorage.setItem('gloom_energy', energy);
+            localStorage.setItem('gloom_profitPerHour', profitPerHour);
+            localStorage.setItem('gloom_lastDailyClaim', lastDailyClaim);
+            localStorage.setItem('gloom_lastSaveTime', Date.now());
+            if (userWalletAddress) {
+                localStorage.setItem('gloom_wallet', userWalletAddress);
+            }
+        }
 
         tapBtn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
@@ -675,7 +742,10 @@
                 scoreEl.innerText = score.toLocaleString();
                 energyEl.innerText = energy;
 
+                playTapSound();
+                triggerHaptic();
                 checkRank();
+                saveData();
                 createPop(e.clientX, e.clientY, `+${perTap}`);
             }
         });
@@ -716,6 +786,7 @@
                 nextRankValEl.innerText = "100";
             }
         }
+        checkRank();
 
         document.getElementById('btnDailyReward').addEventListener('click', () => {
             const now = Date.now();
@@ -724,6 +795,7 @@
                 lastDailyClaim = now;
                 scoreEl.innerText = score.toLocaleString();
                 checkRank();
+                saveData();
                 alert("Selamat! Bonus Harian +1,000 $GLOOM berhasil diklaim!");
             } else {
                 alert("Bonus harian sudah diklaim! Silakan kembali lagi besok.");
@@ -737,6 +809,7 @@
                 scoreEl.innerText = score.toLocaleString();
                 profitPerHourValEl.innerText = `+${profitPerHour.toLocaleString()}`;
                 checkRank();
+                saveData();
                 alert(`Berhasil membeli upgrade! +${profitAdd} Profit/Jam`);
             } else {
                 alert(`Butuh minimal ${cost} $GLOOM poin!`);
@@ -753,12 +826,12 @@
                     userWalletAddress = resp.publicKey.toString();
                     const shortAddr = userWalletAddress.slice(0, 4) + '...' + userWalletAddress.slice(-4);
                     document.getElementById('walletBtnText').innerText = `Connected: ${shortAddr}`;
+                    saveData();
                     alert(`Phantom Wallet Terhubung!\n\nAddress: ${userWalletAddress}`);
                 } catch (err) {
                     alert("Koneksi dibatalkan oleh pengguna.");
                 }
             } else {
-                // Mencoba panggil Native Intent Android
                 const appUrl = encodeURIComponent("https://gloomcombat.netlify.app");
                 window.location.href = `phantom://browse/${appUrl}`;
 
@@ -768,7 +841,6 @@
             }
         });
 
-        // Copy Game URL khusus dApp Browser
         document.getElementById('btnCopyGameLink').addEventListener('click', () => {
             navigator.clipboard.writeText("https://gloomcombat.netlify.app");
             alert("URL Game berhasil disalin!\n\nSilakan buka Aplikasi Phantom -> Menu Browser (dApp) -> Tempel URL di sana.");
@@ -794,6 +866,7 @@
                 scoreEl.innerText = score.toLocaleString();
                 perTapValEl.innerText = `+${perTap}`;
                 checkRank();
+                saveData();
             } else {
                 alert("Butuh minimal 30 $GLOOM poin untuk upgrade Boost!");
             }
@@ -814,6 +887,7 @@
             if (energy < maxEnergy) {
                 energy = Math.min(maxEnergy, energy + 3);
                 energyEl.innerText = energy;
+                saveData();
             }
         }, 1000);
 
@@ -822,6 +896,7 @@
                 score += Math.floor(profitPerHour / 3600);
                 scoreEl.innerText = score.toLocaleString();
                 checkRank();
+                saveData();
             }
         }, 1000);
     </script>
