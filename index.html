@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gloomy Hamster Gold - Telegram Mini App</title>
+    <!-- SDK Resmi Telegram Mini App -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -52,7 +54,7 @@
             pointer-events: none;
         }
 
-        /* Header Section */
+        /* Header */
         .header-section {
             display: flex;
             justify-content: space-between;
@@ -62,7 +64,7 @@
             backdrop-filter: blur(10px);
             padding: 10px 14px;
             border-radius: 18px;
-            z-index: 2;
+            z-index: 10;
         }
 
         .user-profile {
@@ -100,7 +102,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-top: 12px;
-            z-index: 2;
+            z-index: 10;
         }
 
         .stat-card {
@@ -125,22 +127,21 @@
             color: #f1c40f;
         }
 
-        /* Tab Content Pages */
+        /* Pages System */
         .tab-content {
-            display: none;
+            display: none !important;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             flex-grow: 1;
-            z-index: 2;
+            z-index: 10;
             width: 100%;
         }
 
         .tab-content.active {
-            display: flex;
+            display: flex !important;
         }
 
-        /* Balance Display */
         .balance-box {
             text-align: center;
             margin: 10px 0 5px 0;
@@ -188,8 +189,8 @@
         }
 
         .circle-outer {
-            width: 260px;
-            height: 260px;
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
             background: linear-gradient(145deg, rgba(243, 156, 18, 0.25), rgba(0,0,0,0.5));
             padding: 8px;
@@ -217,12 +218,12 @@
         }
 
         .hamster-fullbody-svg {
-            width: 180px;
-            height: 180px;
+            width: 170px;
+            height: 170px;
             filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
+            pointer-events: none;
         }
 
-        /* Floating Pop Text */
         .tap-pop {
             position: absolute;
             font-family: 'Outfit', sans-serif;
@@ -240,7 +241,6 @@
             100% { opacity: 0; transform: translateY(-70px) scale(1.3); }
         }
 
-        /* Cards Page Styling (Mine, Friends, Wallet) */
         .page-card {
             background: rgba(20, 24, 38, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -268,7 +268,7 @@
             background: linear-gradient(90deg, #f39c12, #e67e22);
             color: #000;
             border: none;
-            padding: 10px 16px;
+            padding: 12px 16px;
             border-radius: 10px;
             font-weight: 800;
             font-size: 0.85rem;
@@ -276,12 +276,12 @@
             width: 100%;
         }
 
-        /* Bottom Energy Bar & Navigation */
+        /* Bottom Menu */
         .bottom-section {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            z-index: 2;
+            z-index: 20;
         }
 
         .energy-bar-container {
@@ -307,7 +307,7 @@
             background: linear-gradient(90deg, #f39c12, #e67e22);
             color: #000;
             border: none;
-            padding: 6px 14px;
+            padding: 8px 14px;
             border-radius: 10px;
             font-weight: 800;
             font-size: 0.75rem;
@@ -321,10 +321,10 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 6px;
-            background: rgba(15, 18, 28, 0.95);
-            padding: 6px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(15, 18, 28, 0.98);
+            padding: 8px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-item {
@@ -332,9 +332,9 @@
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            padding: 8px 0;
+            padding: 10px 0;
             color: #6c757d;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             font-weight: 700;
             cursor: pointer;
             border-radius: 12px;
@@ -343,11 +343,16 @@
 
         .nav-item.active {
             color: #f1c40f;
-            background: rgba(241, 196, 15, 0.12);
+            background: rgba(241, 196, 15, 0.15);
         }
 
         .nav-item i {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .nav-item span {
+            pointer-events: none;
         }
     </style>
 </head>
@@ -356,19 +361,19 @@
     <div class="app-container">
         <div class="ambient-glow"></div>
 
-        <!-- Top Header -->
+        <!-- Header -->
         <div class="header-section">
             <div class="user-profile">
-                <div class="avatar">T</div>
+                <div class="avatar" id="userAvatar">T</div>
                 <div class="user-info">
-                    <div class="name">Tuan (CEO)</div>
+                    <div class="name" id="userName">Tuan (CEO)</div>
                     <div class="rank"><i class="fa-solid fa-crown"></i> Gloom Master</div>
                 </div>
             </div>
             <div style="font-size: 0.75rem; color: #8b92a5; font-weight: 700;">SOLANA</div>
         </div>
 
-        <!-- Top Stats Cards -->
+        <!-- Top Stats -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="label">Per Ketukan</div>
@@ -384,7 +389,7 @@
             </div>
         </div>
 
-        <!-- TAB 1: MAIN GAME (TAP) -->
+        <!-- TAB 1: TAP GAME -->
         <div class="tab-content active" id="tab-tap">
             <div class="balance-box">
                 <div class="balance-label">Total Saldo $GLOOM</div>
@@ -397,36 +402,27 @@
             <div class="clicker-area">
                 <div class="circle-outer" id="tapBtn">
                     <div class="circle-inner">
-                        <!-- SVG HD Hamster 1 Badan (Fullbody Business Suit + Crown) -->
                         <svg class="hamster-fullbody-svg" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Ears -->
                             <circle cx="60" cy="50" r="20" fill="#D2B48C"/>
                             <circle cx="60" cy="50" r="11" fill="#FFC0CB"/>
                             <circle cx="140" cy="50" r="20" fill="#D2B48C"/>
                             <circle cx="140" cy="50" r="11" fill="#FFC0CB"/>
-                            <!-- Head -->
                             <circle cx="100" cy="85" r="48" fill="#D2B48C"/>
                             <circle cx="100" cy="90" r="36" fill="#FFE4C4"/>
-                            <!-- Eyes & Sad Tears -->
                             <ellipse cx="80" cy="80" rx="8" ry="11" fill="#1A1A1A"/>
                             <ellipse cx="120" cy="80" rx="8" ry="11" fill="#1A1A1A"/>
                             <circle cx="77" cy="76" r="3.5" fill="white"/>
                             <circle cx="117" cy="76" r="3.5" fill="white"/>
                             <path d="M78 92 Q73 104 75 110 Q78 114 81 110 Q83 104 78 92Z" fill="#70D6FF"/>
-                            <!-- Nose & Mouth -->
                             <polygon points="96,93 104,93 100,98" fill="#FFB6C1"/>
                             <path d="M93 103 Q100 98 107 103" stroke="#1A1A1A" stroke-width="2.5" stroke-linecap="round"/>
-                            <!-- Crown -->
                             <path d="M72 45 L82 25 L100 38 L118 25 L128 45 Z" fill="#FFD700" stroke="#DAA520" stroke-width="2"/>
                             <circle cx="82" cy="25" r="3" fill="#FF0000"/>
                             <circle cx="100" cy="38" r="3" fill="#00DEF6"/>
                             <circle cx="118" cy="25" r="3" fill="#FF0000"/>
-                            <!-- Body / Business Suit -->
                             <path d="M60 130 C60 120, 140 120, 140 130 L150 200 C150 210, 50 210, 50 200 Z" fill="#1E2330"/>
-                            <!-- Suit Shirt & Red Tie -->
                             <polygon points="100,130 85,155 115,155" fill="#FFFFFF"/>
                             <polygon points="100,135 95,185 100,195 105,185" fill="#E74C3C"/>
-                            <!-- Paws -->
                             <ellipse cx="52" cy="165" rx="10" ry="14" fill="#D2B48C"/>
                             <ellipse cx="148" cy="165" rx="10" ry="14" fill="#D2B48C"/>
                         </svg>
@@ -440,7 +436,7 @@
             <div class="page-card">
                 <div class="page-title"><i class="fa-solid fa-pickaxe"></i> Hamster Mining Rig</div>
                 <div class="page-desc">Tingkatkan alat tambang untuk mendapatkan penghasilan pasif $GLOOM secara otomatis setiap jam.</div>
-                <button class="action-btn-card" onclick="buyMiningPass()">Beli Mining Pass (+500 Profit/Jam) - 100 $GLOOM</button>
+                <button class="action-btn-card" id="btnBuyMining">Beli Mining Pass (+500 Profit/Jam) - 100 $GLOOM</button>
             </div>
         </div>
 
@@ -449,7 +445,7 @@
             <div class="page-card">
                 <div class="page-title"><i class="fa-solid fa-users"></i> Undang Teman</div>
                 <div class="page-desc">Dapatkan bonus 2,000 poin $GLOOM untuk setiap teman yang bergabung lewat link referral Tuan.</div>
-                <button class="action-btn-card" onclick="copyInviteLink()"><i class="fa-regular fa-copy"></i> Salin Link Invite</button>
+                <button class="action-btn-card" id="btnCopyInvite"><i class="fa-regular fa-copy"></i> Salin Link Invite</button>
             </div>
         </div>
 
@@ -458,12 +454,12 @@
             <div class="page-card">
                 <div class="page-title"><i class="fa-solid fa-wallet"></i> Solana Wallet</div>
                 <div class="page-desc">Hubungkan dompet Phantom/Solflare Tuan untuk persiapan Airdrop $GLOOM.</div>
-                <button class="action-btn-card" style="margin-bottom: 10px;" onclick="connectWallet()">Connect Phantom Wallet</button>
-                <button class="action-btn-card" style="background: #2a3042; color: #fff;" onclick="copyCA()">Copy Contract Address (CA)</button>
+                <button class="action-btn-card" id="btnConnectWallet" style="margin-bottom: 10px;">Connect Phantom Wallet</button>
+                <button class="action-btn-card" id="btnCopyCA" style="background: #2a3042; color: #fff;">Copy Contract Address (CA)</button>
             </div>
         </div>
 
-        <!-- Controls & Bottom Bar -->
+        <!-- Bottom Menu -->
         <div class="bottom-section">
             <div class="energy-bar-container">
                 <div class="energy-text">
@@ -476,19 +472,19 @@
             </div>
 
             <div class="nav-menu">
-                <div class="nav-item active" onclick="switchTab('tap', this)">
+                <div class="nav-item active" data-tab="tap">
                     <i class="fa-solid fa-hand-pointer"></i>
                     <span>Tap</span>
                 </div>
-                <div class="nav-item" onclick="switchTab('mine', this)">
+                <div class="nav-item" data-tab="mine">
                     <i class="fa-solid fa-pickaxe"></i>
                     <span>Mine</span>
                 </div>
-                <div class="nav-item" onclick="switchTab('friends', this)">
+                <div class="nav-item" data-tab="friends">
                     <i class="fa-solid fa-users"></i>
                     <span>Friends</span>
                 </div>
-                <div class="nav-item" onclick="switchTab('wallet', this)">
+                <div class="nav-item" data-tab="wallet">
                     <i class="fa-solid fa-wallet"></i>
                     <span>Wallet</span>
                 </div>
@@ -497,6 +493,17 @@
     </div>
 
     <script>
+        // Inisialisasi Telegram WebApp
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) {
+            tg.expand(); // Buka layar penuh di Telegram
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const user = tg.initDataUnsafe.user;
+                document.getElementById('userName').innerText = user.first_name + " (CEO)";
+                document.getElementById('userAvatar').innerText = user.first_name.charAt(0).toUpperCase();
+            }
+        }
+
         let score = 0;
         let perTap = 1;
         let energy = 1000;
@@ -508,10 +515,17 @@
         const perTapValEl = document.getElementById('perTapVal');
         const profitPerHourValEl = document.getElementById('profitPerHourVal');
         const tapBtn = document.getElementById('tapBtn');
-        const boostBtn = document.getElementById('boostBtn');
 
-        // Event Tap Utama
-        tapBtn.addEventListener('click', (e) => {
+        // Event Listener khusus Touch/Click untuk Telegram
+        function addFastClick(element, handler) {
+            element.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                handler(e);
+            });
+        }
+
+        // Tap Clicker
+        addFastClick(tapBtn, (e) => {
             if (energy >= perTap) {
                 score += perTap;
                 energy -= perTap;
@@ -519,7 +533,7 @@
                 scoreEl.innerText = score.toLocaleString();
                 energyEl.innerText = energy;
 
-                createPop(e.clientX, e.clientY, `+${perTap}`);
+                createPop(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, `+${perTap}`);
             }
         });
 
@@ -538,17 +552,24 @@
             }, 600);
         }
 
-        // Switch Tab Navigation
-        function switchTab(tabName, element) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        // Sistem Perpindahan Tab Navigasi Bawah
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const targetTab = this.getAttribute('data-tab');
 
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            element.classList.add('active');
-        }
+                // Matikan tab lain
+                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
 
-        // Upgrade Boost
-        boostBtn.addEventListener('click', () => {
+                // Aktifkan tab yang diklik
+                document.getElementById(`tab-${targetTab}`).classList.add('active');
+                this.classList.add('active');
+            });
+        });
+
+        // Tombol Boost
+        document.getElementById('boostBtn').addEventListener('click', () => {
             if (score >= 30) {
                 score -= 30;
                 perTap += 1;
@@ -559,8 +580,8 @@
             }
         });
 
-        // Fitur Tab Mine
-        function buyMiningPass() {
+        // Tombol Mine
+        document.getElementById('btnBuyMining').addEventListener('click', () => {
             if (score >= 100) {
                 score -= 100;
                 profitPerHour += 500;
@@ -570,25 +591,25 @@
             } else {
                 alert("Butuh minimal 100 $GLOOM poin!");
             }
-        }
+        });
 
-        // Fitur Tab Friends
-        function copyInviteLink() {
-            navigator.clipboard.writeText("https://t.me/GloomCombatbot/app?start=ref123");
+        // Tombol Friends
+        document.getElementById('btnCopyInvite').addEventListener('click', () => {
+            navigator.clipboard.writeText("https://t.me/GloomCombatbot/app");
             alert("Link Referral disalin ke clipboard!");
-        }
+        });
 
-        // Fitur Tab Wallet
-        function connectWallet() {
-            alert("Sistem integrasi Phantom Wallet akan segera hadir saat Airdrop!");
-        }
+        // Tombol Wallet
+        document.getElementById('btnConnectWallet').addEventListener('click', () => {
+            alert("Sistem integrasi Phantom Wallet akan segera hadir!");
+        });
 
-        function copyCA() {
+        document.getElementById('btnCopyCA').addEventListener('click', () => {
             navigator.clipboard.writeText("MASUKKAN_CA_TUAN_DI_SINI");
             alert("Contract Address (CA) disalin!");
-        }
+        });
 
-        // Regenerasi Energi
+        // Loop Energi & Profit
         setInterval(() => {
             if (energy < maxEnergy) {
                 energy = Math.min(maxEnergy, energy + 3);
@@ -596,7 +617,6 @@
             }
         }, 1000);
 
-        // Profit Per Jam Otomatis
         setInterval(() => {
             if (profitPerHour > 0) {
                 score += Math.floor(profitPerHour / 3600);
