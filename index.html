@@ -80,6 +80,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .user-profile:active {
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .avatar {
@@ -93,11 +101,26 @@
             font-weight: 800;
             color: #000;
             font-size: 0.75rem;
+            position: relative;
+        }
+
+        .avatar-edit-icon {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            font-size: 0.45rem;
+            background: #fff;
+            color: #000;
+            padding: 1px 2px;
+            border-radius: 50%;
         }
 
         .user-info .name {
             font-size: 0.75rem;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .user-info .rank {
@@ -484,12 +507,12 @@
     <div class="app-container">
         <div class="ambient-glow"></div>
 
-        <!-- Header -->
+        <!-- Header (Click to Edit Profile) -->
         <div class="header-section">
-            <div class="user-profile">
-                <div class="avatar" id="userAvatar">T</div>
+            <div class="user-profile" id="btnEditProfile" title="Klik untuk edit profil">
+                <div class="avatar" id="userAvatar">T<i class="fa-solid fa-pen avatar-edit-icon"></i></div>
                 <div class="user-info">
-                    <div class="name" id="userName">Tuan (CEO)</div>
+                    <div class="name"><span id="userName">Tuan (CEO)</span> <i class="fa-solid fa-pencil" style="font-size:0.55rem; color:#8b92a5;"></i></div>
                     <div class="rank" id="userRank"><i class="fa-solid fa-crown"></i> Bronze CEO</div>
                 </div>
             </div>
@@ -504,7 +527,7 @@
             </div>
             <div class="stat-card">
                 <div class="label">Next Rank</div>
-                <div class="val" id="nextRankVal">100</div>
+                <div class="val" id="nextRankVal">100K</div>
             </div>
             <div class="stat-card">
                 <div class="label">Profit / Jam</div>
@@ -569,7 +592,7 @@
                             <div class="task-reward">+100 Profit/Jam</div>
                         </div>
                     </div>
-                    <button class="task-btn" onclick="buyCard(50, 100)">Beli (50)</button>
+                    <button class="task-btn" onclick="buyCard(500, 100)">Beli (500)</button>
                 </div>
 
                 <div class="task-card">
@@ -580,7 +603,7 @@
                             <div class="task-reward">+300 Profit/Jam</div>
                         </div>
                     </div>
-                    <button class="task-btn" onclick="buyCard(150, 300)">Beli (150)</button>
+                    <button class="task-btn" onclick="buyCard(1500, 300)">Beli (1.5K)</button>
                 </div>
 
                 <div class="task-card">
@@ -591,12 +614,12 @@
                             <div class="task-reward">+1,000 Profit/Jam</div>
                         </div>
                     </div>
-                    <button class="task-btn" onclick="buyCard(500, 1000)">Beli (500)</button>
+                    <button class="task-btn" onclick="buyCard(5000, 1000)">Beli (5K)</button>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 3: SOCIAL TASKS (OFFICIAL LINKS REVISED) -->
+        <!-- TAB 3: SOCIAL TASKS -->
         <div class="tab-content" id="tab-task">
             <div class="cards-grid">
                 <div class="task-card">
@@ -717,14 +740,6 @@
 
     <script>
         const tg = window.Telegram ? window.Telegram.WebApp : null;
-        if (tg) {
-            tg.expand();
-            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                const user = tg.initDataUnsafe.user;
-                document.getElementById('userName').innerText = user.first_name + " (CEO)";
-                document.getElementById('userAvatar').innerText = user.first_name.charAt(0).toUpperCase();
-            }
-        }
 
         // Variable Game State
         let score = parseInt(localStorage.getItem('gloom_score')) || 0;
@@ -735,6 +750,19 @@
         let lastDailyClaim = parseInt(localStorage.getItem('gloom_lastDailyClaim')) || 0;
         let lastSaveTime = parseInt(localStorage.getItem('gloom_lastSaveTime')) || Date.now();
         let userWalletAddress = localStorage.getItem('gloom_wallet') || null;
+
+        // Custom Profile State
+        let customName = localStorage.getItem('gloom_customName') || "Tuan (CEO)";
+        let customAvatar = localStorage.getItem('gloom_customAvatar') || "T";
+
+        if (tg) {
+            tg.expand();
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user && !localStorage.getItem('gloom_customName')) {
+                const user = tg.initDataUnsafe.user;
+                customName = user.first_name + " (CEO)";
+                customAvatar = user.first_name.charAt(0).toUpperCase();
+            }
+        }
 
         // Tasks State
         let completedTasks = JSON.parse(localStorage.getItem('gloom_tasks')) || {};
@@ -774,6 +802,29 @@
             }
         }
 
+        // Apply Profile Customization
+        function applyProfileDisplay() {
+            document.getElementById('userName').innerText = customName;
+            document.getElementById('userAvatar').innerHTML = `${customAvatar}<i class="fa-solid fa-pen avatar-edit-icon"></i>`;
+        }
+        applyProfileDisplay();
+
+        // Edit Profile Event
+        document.getElementById('btnEditProfile').addEventListener('click', () => {
+            const newName = prompt("Masukkan Nama CEO / Player Tuan:", customName);
+            if (newName && newName.trim() !== "") {
+                customName = newName.trim();
+                const newAvatar = prompt("Masukkan 1 Huruf Inisial Avatar:", customName.charAt(0).toUpperCase());
+                if (newAvatar && newAvatar.trim() !== "") {
+                    customAvatar = newAvatar.trim().charAt(0).toUpperCase();
+                }
+                localStorage.setItem('gloom_customName', customName);
+                localStorage.setItem('gloom_customAvatar', customAvatar);
+                applyProfileDisplay();
+                alert("Profil CEO berhasil diperbarui!");
+            }
+        });
+
         // Load Initial Saved Display
         scoreEl.innerText = score.toLocaleString();
         perTapValEl.innerText = `+${perTap}`;
@@ -806,7 +857,6 @@
         }
         updateTaskUI();
 
-        // Task Action Function
         function doTask(taskId, url, reward) {
             if (completedTasks[taskId]) return;
 
@@ -822,6 +872,30 @@
                 alert(`Tugas selesai! +${reward.toLocaleString()} $GLOOM ditambahkan ke saldo Tuan!`);
             }, 2000);
         }
+
+        // Hard Core Scaled Rank System
+        function checkRank() {
+            if (score >= 100000000) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #00DEF6;"></i> Solana Lord`;
+                nextRankValEl.innerText = "MAX";
+            } else if (score >= 50000000) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #e74c3c;"></i> Gloom Master`;
+                nextRankValEl.innerText = "100M";
+            } else if (score >= 10000000) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #e5e4e2;"></i> Platinum CEO`;
+                nextRankValEl.innerText = "50M";
+            } else if (score >= 1000000) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #ffd700;"></i> Gold CEO`;
+                nextRankValEl.innerText = "10M";
+            } else if (score >= 100000) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #c0c0c0;"></i> Silver CEO`;
+                nextRankValEl.innerText = "1M";
+            } else {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #cd7f32;"></i> Bronze CEO`;
+                nextRankValEl.innerText = "100K";
+            }
+        }
+        checkRank();
 
         // Offline Profit Calculator
         const nowTime = Date.now();
@@ -881,29 +955,6 @@
                 pop.remove();
             }, 600);
         }
-
-        function checkRank() {
-            if (score >= 50000) {
-                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #00DEF6;"></i> Solana Lord`;
-                nextRankValEl.innerText = "MAX";
-            } else if (score >= 10000) {
-                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #f1c40f;"></i> Gloom Master`;
-                nextRankValEl.innerText = "50K";
-            } else if (score >= 2500) {
-                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #e5e4e2;"></i> Platinum CEO`;
-                nextRankValEl.innerText = "10K";
-            } else if (score >= 500) {
-                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #ffd700;"></i> Gold CEO`;
-                nextRankValEl.innerText = "2.5K";
-            } else if (score >= 100) {
-                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #c0c0c0;"></i> Silver CEO`;
-                nextRankValEl.innerText = "500";
-            } else {
-                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #cd7f32;"></i> Bronze CEO`;
-                nextRankValEl.innerText = "100";
-            }
-        }
-        checkRank();
 
         document.getElementById('btnDailyReward').addEventListener('click', () => {
             const now = Date.now();
