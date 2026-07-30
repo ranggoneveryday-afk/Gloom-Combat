@@ -575,10 +575,14 @@
         <div class="tab-content" id="tab-wallet">
             <div class="page-card">
                 <div class="page-title"><i class="fa-solid fa-wallet"></i> Solana Web3 Wallet</div>
-                <div class="page-desc">Hubungkan dompet Phantom/Solflare Tuan untuk verifikasi kepemilikan dan persiapan Airdrop $GLOOM.</div>
+                <div class="page-desc">Hubungkan dompet Phantom Tuan untuk verifikasi kepemilikan dan Airdrop $GLOOM.</div>
                 
-                <button class="action-btn-card" id="btnConnectWallet" style="margin-bottom: 8px;">
+                <button class="action-btn-card" id="btnConnectWallet" style="margin-bottom: 6px;">
                     <i class="fa-solid fa-plug"></i> <span id="walletBtnText">Connect Phantom Wallet</span>
+                </button>
+
+                <button class="action-btn-card" id="btnCopyGameLink" style="background: #1e2330; color: #f1c40f; margin-bottom: 6px;">
+                    <i class="fa-solid fa-link"></i> Salin Game URL (Untuk Phantom dApp)
                 </button>
                 
                 <button class="action-btn-card" id="btnCopyCA" style="background: #2a3042; color: #fff;">
@@ -739,7 +743,7 @@
             }
         }
 
-        // Smart Phantom Wallet Connect + Auto Deep-Link
+        // Direct Native Intent & Connect Wallet
         document.getElementById('btnConnectWallet').addEventListener('click', async () => {
             const isPhantom = window.solana && window.solana.isPhantom;
 
@@ -754,14 +758,20 @@
                     alert("Koneksi dibatalkan oleh pengguna.");
                 }
             } else {
-                // Jika dibuka lewat Chrome/Browser biasa, arahkan otomatis via Phantom Deep Link
-                const appUrl = "https://gloomcombat.netlify.app";
-                const phantomDeepLink = `https://phantom.app/ul/browse/${encodeURIComponent(appUrl)}?ref=${encodeURIComponent(appUrl)}`;
-                
-                if (confirm("Dompet Phantom belum terdeteksi di browser ini.\n\nApakah Tuan ingin membuka game ini langsung di Aplikasi Phantom?")) {
-                    window.location.href = phantomDeepLink;
-                }
+                // Mencoba panggil Native Intent Android
+                const appUrl = encodeURIComponent("https://gloomcombat.netlify.app");
+                window.location.href = `phantom://browse/${appUrl}`;
+
+                setTimeout(() => {
+                    alert("Jika aplikasi Phantom tidak terbuka otomatis, silakan klik tombol 'Salin Game URL' lalu tempelkan di browser dApp aplikasi Phantom Tuan!");
+                }, 1500);
             }
+        });
+
+        // Copy Game URL khusus dApp Browser
+        document.getElementById('btnCopyGameLink').addEventListener('click', () => {
+            navigator.clipboard.writeText("https://gloomcombat.netlify.app");
+            alert("URL Game berhasil disalin!\n\nSilakan buka Aplikasi Phantom -> Menu Browser (dApp) -> Tempel URL di sana.");
         });
 
         const navItems = document.querySelectorAll('.nav-item');
