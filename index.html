@@ -20,23 +20,23 @@
             touch-action: manipulation;
         }
 
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
             background-color: #07090e;
             color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            height: -webkit-fill-available;
             overflow: hidden;
         }
 
         .app-container {
             width: 100%;
             max-width: 430px;
-            height: 100%;
+            height: 100vh;
             background: radial-gradient(circle at 50% 10%, #1e1b2e 0%, #08090d 70%);
-            padding: 12px 16px env(safe-area-inset-bottom, 20px) 16px;
+            padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 8px)) 14px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -46,17 +46,17 @@
 
         .ambient-glow {
             position: absolute;
-            top: 40%;
+            top: 35%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 240px;
-            height: 240px;
+            width: 220px;
+            height: 220px;
             background: radial-gradient(circle, rgba(243, 156, 18, 0.22) 0%, rgba(0,0,0,0) 70%);
             z-index: 1;
             pointer-events: none;
         }
 
-        /* Header */
+        /* Header Compact */
         .header-section {
             display: flex;
             justify-content: space-between;
@@ -65,19 +65,19 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             padding: 8px 12px;
-            border-radius: 16px;
+            border-radius: 14px;
             z-index: 10;
         }
 
         .user-profile {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .avatar {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             background: linear-gradient(135deg, #f39c12, #e67e22);
             border-radius: 50%;
             display: flex;
@@ -85,39 +85,39 @@
             justify-content: center;
             font-weight: 800;
             color: #000;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .user-info .name {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
         }
 
         .user-info .rank {
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             color: #f1c40f;
             font-weight: 600;
         }
 
-        /* Top Cards */
+        /* Top Stats Cards Compact */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            margin-top: 8px;
+            margin-top: 6px;
             z-index: 10;
         }
 
         .stat-card {
             background: rgba(20, 24, 38, 0.7);
             border: 1px solid rgba(241, 196, 15, 0.15);
-            border-radius: 12px;
-            padding: 6px 4px;
+            border-radius: 10px;
+            padding: 5px 2px;
             text-align: center;
         }
 
         .stat-card .label {
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             color: #8b92a5;
             font-weight: 600;
             margin-bottom: 2px;
@@ -125,7 +125,7 @@
 
         .stat-card .val {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.82rem;
+            font-size: 0.78rem;
             font-weight: 800;
             color: #f1c40f;
         }
@@ -147,11 +147,11 @@
 
         .balance-box {
             text-align: center;
-            margin: 6px 0 2px 0;
+            margin: 4px 0 2px 0;
         }
 
         .balance-label {
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             text-transform: uppercase;
             letter-spacing: 1.2px;
             color: #8b92a5;
@@ -160,7 +160,7 @@
 
         .balance-value {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             font-weight: 900;
             color: #ffffff;
             display: flex;
@@ -170,19 +170,19 @@
         }
 
         .coin-icon {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             background: linear-gradient(135deg, #ffe066, #f39c12);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 12px rgba(243, 156, 18, 0.6);
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.6);
             color: #000;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
-        /* Clicker Area Responsive */
+        /* Clicker Area Sized Down */
         .clicker-area {
             display: flex;
             justify-content: center;
@@ -192,8 +192,8 @@
         }
 
         .circle-outer {
-            width: 210px;
-            height: 210px;
+            width: 185px;
+            height: 185px;
             border-radius: 50%;
             background: linear-gradient(145deg, rgba(243, 156, 18, 0.25), rgba(0,0,0,0.5));
             padding: 6px;
@@ -215,14 +215,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
             position: relative;
             overflow: hidden;
         }
 
         .hamster-fullbody-svg {
-            width: 145px;
-            height: 145px;
+            width: 125px;
+            height: 125px;
             filter: drop-shadow(0 6px 10px rgba(0,0,0,0.6));
             pointer-events: none;
         }
@@ -230,7 +230,7 @@
         .tap-pop {
             position: absolute;
             font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: #ffe066;
             text-shadow: 0 2px 10px rgba(0,0,0,0.9);
@@ -241,51 +241,51 @@
 
         @keyframes popUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.2); }
         }
 
         .page-card {
             background: rgba(20, 24, 38, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 14px;
+            padding: 14px;
             width: 100%;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             text-align: center;
         }
 
         .page-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #f1c40f;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .page-desc {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: #8b92a5;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .action-btn-card {
             background: linear-gradient(90deg, #f39c12, #e67e22);
             color: #000;
             border: none;
-            padding: 10px 14px;
-            border-radius: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
             font-weight: 800;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             cursor: pointer;
             width: 100%;
         }
 
-        /* Bottom Menu with Safe Spacing */
+        /* Bottom Section Adjusted to Prevent Overflow */
         .bottom-section {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             z-index: 20;
-            margin-bottom: 10px;
+            margin-bottom: 4px;
         }
 
         .energy-bar-container {
@@ -293,7 +293,7 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.05);
-            padding: 6px 12px;
+            padding: 5px 12px;
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
@@ -304,14 +304,14 @@
             gap: 6px;
             font-weight: 800;
             color: #f1c40f;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
         }
 
         .boost-btn {
             background: linear-gradient(90deg, #f39c12, #e67e22);
             color: #000;
             border: none;
-            padding: 6px 12px;
+            padding: 4px 10px;
             border-radius: 8px;
             font-weight: 800;
             font-size: 0.7rem;
@@ -324,10 +324,10 @@
         .nav-menu {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
+            gap: 4px;
             background: rgba(15, 18, 28, 0.98);
-            padding: 6px;
-            border-radius: 16px;
+            padding: 5px;
+            border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
@@ -336,13 +336,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
-            padding: 8px 0;
+            gap: 2px;
+            padding: 5px 0;
             color: #6c757d;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 700;
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.2s ease;
         }
 
@@ -352,7 +352,7 @@
         }
 
         .nav-item i {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             pointer-events: none;
         }
 
@@ -375,7 +375,7 @@
                     <div class="rank"><i class="fa-solid fa-crown"></i> Gloom Master</div>
                 </div>
             </div>
-            <div style="font-size: 0.7rem; color: #8b92a5; font-weight: 700;">SOLANA</div>
+            <div style="font-size: 0.68rem; color: #8b92a5; font-weight: 700;">SOLANA</div>
         </div>
 
         <!-- Top Stats -->
@@ -464,7 +464,7 @@
             </div>
         </div>
 
-        <!-- Bottom Menu -->
+        <!-- Bottom Menu Perfect Alignment -->
         <div class="bottom-section">
             <div class="energy-bar-container">
                 <div class="energy-text">
@@ -599,9 +599,11 @@
             alert("Sistem integrasi Phantom Wallet akan segera hadir!");
         });
 
+        // CA Solana Resmi $GLOOM yang Tuan berikan
         document.getElementById('btnCopyCA').addEventListener('click', () => {
-            navigator.clipboard.writeText(AWxCsSKmUaChr7fZdeyFwEuYGF5EnTLSxRskPC11pump);
-            alert("Contract Address (CA) disalin!");
+            const contractAddress = "AWxCsSKmUaChr7fZdeyFwEuYGF5EnTLSxRskPC11pump";
+            navigator.clipboard.writeText(contractAddress);
+            alert("Contract Address (CA) $GLOOM berhasil disalin!\n\n" + contractAddress);
         });
 
         setInterval(() => {
