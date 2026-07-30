@@ -40,13 +40,12 @@
             max-width: 430px;
             min-height: 100vh;
             background: radial-gradient(circle at 50% 10%, #1e1b2e 0%, #08090d 70%);
-            /* Padding atas & bawah disesuaikan agar tidak terpotong browser HP */
-            padding: 28px 14px 24px 14px;
+            padding: 24px 14px 20px 14px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
-            gap: 12px;
+            gap: 10px;
         }
 
         .ambient-glow {
@@ -152,7 +151,7 @@
 
         .balance-box {
             text-align: center;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .balance-label {
@@ -185,6 +184,22 @@
             box-shadow: 0 0 8px rgba(243, 156, 18, 0.6);
             color: #000;
             font-size: 0.9rem;
+        }
+
+        /* Daily Claim Button */
+        .daily-reward-btn {
+            background: rgba(241, 196, 15, 0.1);
+            border: 1px solid rgba(241, 196, 15, 0.3);
+            color: #f1c40f;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         /* Clicker Area Ringkas */
@@ -247,6 +262,54 @@
         @keyframes popUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
             100% { opacity: 0; transform: translateY(-40px) scale(1.2); }
+        }
+
+        /* Mining Cards Container */
+        .cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .mining-card {
+            background: rgba(20, 24, 38, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+
+        .card-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .card-profit {
+            font-size: 0.65rem;
+            color: #2ecc71;
+            font-weight: 600;
+        }
+
+        .card-btn {
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            color: #000;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 0.68rem;
+            cursor: pointer;
         }
 
         .page-card {
@@ -374,7 +437,7 @@
                 <div class="avatar" id="userAvatar">T</div>
                 <div class="user-info">
                     <div class="name" id="userName">Tuan (CEO)</div>
-                    <div class="rank"><i class="fa-solid fa-crown"></i> Gloom Master</div>
+                    <div class="rank" id="userRank"><i class="fa-solid fa-crown"></i> Bronze CEO</div>
                 </div>
             </div>
             <div style="font-size: 0.65rem; color: #8b92a5; font-weight: 700;">SOLANA</div>
@@ -387,8 +450,8 @@
                 <div class="val" id="perTapVal">+1</div>
             </div>
             <div class="stat-card">
-                <div class="label">Naik Level</div>
-                <div class="val">50K</div>
+                <div class="label">Next Rank</div>
+                <div class="val" id="nextRankVal">100</div>
             </div>
             <div class="stat-card">
                 <div class="label">Profit / Jam</div>
@@ -405,6 +468,10 @@
                     <span id="score">0</span>
                 </div>
             </div>
+
+            <button class="daily-reward-btn" id="btnDailyReward">
+                <i class="fa-solid fa-calendar-check"></i> Klaim Bonus Harian (+1,000)
+            </button>
 
             <div class="clicker-area">
                 <div class="circle-outer" id="tapBtn">
@@ -438,12 +505,32 @@
             </div>
         </div>
 
-        <!-- TAB 2: MINE -->
+        <!-- TAB 2: MINE MULTI-CARD -->
         <div class="tab-content" id="tab-mine">
-            <div class="page-card">
-                <div class="page-title"><i class="fa-solid fa-pickaxe"></i> Hamster Mining Rig</div>
-                <div class="page-desc">Tingkatkan alat tambang untuk mendapatkan penghasilan pasif $GLOOM secara otomatis setiap jam.</div>
-                <button class="action-btn-card" id="btnBuyMining">Beli Mining Pass (+500 Profit/Jam) - 100 $GLOOM</button>
+            <div class="cards-grid">
+                <div class="mining-card">
+                    <div class="card-info">
+                        <div class="card-title"><i class="fa-solid fa-robot"></i> AI Trading Bot</div>
+                        <div class="card-profit">+100 $GLOOM / jam</div>
+                    </div>
+                    <button class="card-btn" onclick="buyCard(50, 100)">Beli (50)</button>
+                </div>
+
+                <div class="mining-card">
+                    <div class="card-info">
+                        <div class="card-title"><i class="fa-solid fa-server"></i> Solana Server Node</div>
+                        <div class="card-profit">+300 $GLOOM / jam</div>
+                    </div>
+                    <button class="card-btn" onclick="buyCard(150, 300)">Beli (150)</button>
+                </div>
+
+                <div class="mining-card">
+                    <div class="card-info">
+                        <div class="card-title"><i class="fa-solid fa-gem"></i> Staking VIP Pass</div>
+                        <div class="card-profit">+1,000 $GLOOM / jam</div>
+                    </div>
+                    <button class="card-btn" onclick="buyCard(500, 1000)">Beli (500)</button>
+                </div>
             </div>
         </div>
 
@@ -515,21 +602,19 @@
         let energy = 1000;
         const maxEnergy = 1000;
         let profitPerHour = 0;
+        let lastDailyClaim = 0;
 
         const scoreEl = document.getElementById('score');
         const energyEl = document.getElementById('energy');
         const perTapValEl = document.getElementById('perTapVal');
         const profitPerHourValEl = document.getElementById('profitPerHourVal');
+        const userRankEl = document.getElementById('userRank');
+        const nextRankValEl = document.getElementById('nextRankVal');
         const tapBtn = document.getElementById('tapBtn');
 
-        function addFastClick(element, handler) {
-            element.addEventListener('pointerdown', (e) => {
-                e.preventDefault();
-                handler(e);
-            });
-        }
-
-        addFastClick(tapBtn, (e) => {
+        // Multi-touch Pointer Down Support
+        tapBtn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
             if (energy >= perTap) {
                 score += perTap;
                 energy -= perTap;
@@ -537,7 +622,8 @@
                 scoreEl.innerText = score.toLocaleString();
                 energyEl.innerText = energy;
 
-                createPop(e.clientX || e.touches[0].clientX, e.clientY || e.touches[0].clientY, `+${perTap}`);
+                checkRank();
+                createPop(e.clientX, e.clientY, `+${perTap}`);
             }
         });
 
@@ -554,6 +640,57 @@
             setTimeout(() => {
                 pop.remove();
             }, 600);
+        }
+
+        // Auto Dynamic Rank System
+        function checkRank() {
+            if (score >= 50000) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #00DEF6;"></i> Solana Lord`;
+                nextRankValEl.innerText = "MAX";
+            } else if (score >= 10000) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #f1c40f;"></i> Gloom Master`;
+                nextRankValEl.innerText = "50K";
+            } else if (score >= 2500) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #e5e4e2;"></i> Platinum CEO`;
+                nextRankValEl.innerText = "10K";
+            } else if (score >= 500) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #ffd700;"></i> Gold CEO`;
+                nextRankValEl.innerText = "2.5K";
+            } else if (score >= 100) {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #c0c0c0;"></i> Silver CEO`;
+                nextRankValEl.innerText = "500";
+            } else {
+                userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #cd7f32;"></i> Bronze CEO`;
+                nextRankValEl.innerText = "100";
+            }
+        }
+
+        // Daily Claim System
+        document.getElementById('btnDailyReward').addEventListener('click', () => {
+            const now = Date.now();
+            if (now - lastDailyClaim > 86400000) { // 24 jam
+                score += 1000;
+                lastDailyClaim = now;
+                scoreEl.innerText = score.toLocaleString();
+                checkRank();
+                alert("Selamat! Bonus Harian +1,000 $GLOOM berhasil diklaim!");
+            } else {
+                alert("Bonus harian sudah diklaim! Silakan kembali lagi besok.");
+            }
+        });
+
+        // Mining Card Purchase
+        function buyCard(cost, profitAdd) {
+            if (score >= cost) {
+                score -= cost;
+                profitPerHour += profitAdd;
+                scoreEl.innerText = score.toLocaleString();
+                profitPerHourValEl.innerText = `+${profitPerHour.toLocaleString()}`;
+                checkRank();
+                alert(`Berhasil membeli upgrade! +${profitAdd} Profit/Jam`);
+            } else {
+                alert(`Butuh minimal ${cost} $GLOOM poin!`);
+            }
         }
 
         const navItems = document.querySelectorAll('.nav-item');
@@ -575,20 +712,9 @@
                 perTap += 1;
                 scoreEl.innerText = score.toLocaleString();
                 perTapValEl.innerText = `+${perTap}`;
+                checkRank();
             } else {
                 alert("Butuh minimal 30 $GLOOM poin untuk upgrade Boost!");
-            }
-        });
-
-        document.getElementById('btnBuyMining').addEventListener('click', () => {
-            if (score >= 100) {
-                score -= 100;
-                profitPerHour += 500;
-                scoreEl.innerText = score.toLocaleString();
-                profitPerHourValEl.innerText = `+${profitPerHour.toLocaleString()}`;
-                alert("Berhasil membeli Mining Pass! +500 Profit/Jam");
-            } else {
-                alert("Butuh minimal 100 $GLOOM poin!");
             }
         });
 
@@ -618,6 +744,7 @@
             if (profitPerHour > 0) {
                 score += Math.floor(profitPerHour / 3600);
                 scoreEl.innerText = score.toLocaleString();
+                checkRank();
             }
         }, 1000);
     </script>
