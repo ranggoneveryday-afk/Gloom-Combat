@@ -8,6 +8,9 @@
     <!-- Kode Verifikasi Google AdSense Tuan -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2978270645560784" crossorigin="anonymous"></script>
 
+    <!-- Solana Web3 SDK -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+
     <!-- SDK Resmi Telegram Mini App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
@@ -346,6 +349,31 @@
             width: 100%;
         }
 
+        /* Tokenomics Box */
+        .tokenomics-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px;
+            margin-top: 8px;
+            font-size: 0.65rem;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tokenomics-row {
+            display: flex;
+            justify-content: space-between;
+            color: #8b92a5;
+        }
+
+        .tokenomics-row span:last-child {
+            color: #f1c40f;
+            font-weight: 700;
+        }
+
         /* Bottom Section */
         .bottom-section {
             display: flex;
@@ -505,7 +533,7 @@
             </div>
         </div>
 
-        <!-- TAB 2: MINE MULTI-CARD -->
+        <!-- TAB 2: MINE -->
         <div class="tab-content" id="tab-mine">
             <div class="cards-grid">
                 <div class="mining-card">
@@ -543,13 +571,34 @@
             </div>
         </div>
 
-        <!-- TAB 4: WALLET -->
+        <!-- TAB 4: WALLET & WEB3 SOLANA -->
         <div class="tab-content" id="tab-wallet">
             <div class="page-card">
-                <div class="page-title"><i class="fa-solid fa-wallet"></i> Solana Wallet</div>
-                <div class="page-desc">Hubungkan dompet Phantom/Solflare Tuan untuk persiapan Airdrop $GLOOM.</div>
-                <button class="action-btn-card" id="btnConnectWallet" style="margin-bottom: 8px;">Connect Phantom Wallet</button>
-                <button class="action-btn-card" id="btnCopyCA" style="background: #2a3042; color: #fff;">Copy Contract Address (CA)</button>
+                <div class="page-title"><i class="fa-solid fa-wallet"></i> Solana Web3 Wallet</div>
+                <div class="page-desc">Hubungkan dompet Phantom/Solflare Tuan untuk verifikasi kepemilikan dan persiapan Airdrop $GLOOM.</div>
+                
+                <button class="action-btn-card" id="btnConnectWallet" style="margin-bottom: 8px;">
+                    <i class="fa-solid fa-plug"></i> <span id="walletBtnText">Connect Phantom / Solflare</span>
+                </button>
+                
+                <button class="action-btn-card" id="btnCopyCA" style="background: #2a3042; color: #fff;">
+                    <i class="fa-regular fa-copy"></i> Copy Contract Address (CA)
+                </button>
+
+                <div class="tokenomics-box">
+                    <div class="tokenomics-row">
+                        <span>Jaringan:</span>
+                        <span>Solana Mainnet</span>
+                    </div>
+                    <div class="tokenomics-row">
+                        <span>Token Symbol:</span>
+                        <span>$GLOOM</span>
+                    </div>
+                    <div class="tokenomics-row">
+                        <span>Platform:</span>
+                        <span>Pump.fun</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -603,6 +652,7 @@
         const maxEnergy = 1000;
         let profitPerHour = 0;
         let lastDailyClaim = 0;
+        let userWalletAddress = null;
 
         const scoreEl = document.getElementById('score');
         const energyEl = document.getElementById('energy');
@@ -612,7 +662,6 @@
         const nextRankValEl = document.getElementById('nextRankVal');
         const tapBtn = document.getElementById('tapBtn');
 
-        // Multi-touch Pointer Down Support
         tapBtn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             if (energy >= perTap) {
@@ -642,7 +691,6 @@
             }, 600);
         }
 
-        // Auto Dynamic Rank System
         function checkRank() {
             if (score >= 50000) {
                 userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #00DEF6;"></i> Solana Lord`;
@@ -665,10 +713,9 @@
             }
         }
 
-        // Daily Claim System
         document.getElementById('btnDailyReward').addEventListener('click', () => {
             const now = Date.now();
-            if (now - lastDailyClaim > 86400000) { // 24 jam
+            if (now - lastDailyClaim > 86400000) {
                 score += 1000;
                 lastDailyClaim = now;
                 scoreEl.innerText = score.toLocaleString();
@@ -679,7 +726,6 @@
             }
         });
 
-        // Mining Card Purchase
         function buyCard(cost, profitAdd) {
             if (score >= cost) {
                 score -= cost;
@@ -692,6 +738,36 @@
                 alert(`Butuh minimal ${cost} $GLOOM poin!`);
             }
         }
+
+        // Web3 Real Solana Wallet Connect Function
+        document.getElementById('btnConnectWallet').addEventListener('click', async () => {
+            const isPhantom = window.solana && window.solana.isPhantom;
+            const isSolflare = window.solflare && window.solflare.isSolflare;
+
+            if (isPhantom) {
+                try {
+                    const resp = await window.solana.connect();
+                    userWalletAddress = resp.publicKey.toString();
+                    const shortAddr = userWalletAddress.slice(0, 4) + '...' + userWalletAddress.slice(-4);
+                    document.getElementById('walletBtnText').innerText = `Connected: ${shortAddr}`;
+                    alert(`Phantom Wallet Terhubung!\n\nAddress: ${userWalletAddress}`);
+                } catch (err) {
+                    alert("Koneksi dibatalkan oleh pengguna.");
+                }
+            } else if (isSolflare) {
+                try {
+                    await window.solflare.connect();
+                    userWalletAddress = window.solflare.publicKey.toString();
+                    const shortAddr = userWalletAddress.slice(0, 4) + '...' + userWalletAddress.slice(-4);
+                    document.getElementById('walletBtnText').innerText = `Connected: ${shortAddr}`;
+                    alert(`Solflare Wallet Terhubung!\n\nAddress: ${userWalletAddress}`);
+                } catch (err) {
+                    alert("Koneksi dibatalkan oleh pengguna.");
+                }
+            } else {
+                alert("Dompet Solana (Phantom/Solflare) tidak terdeteksi di browser ini.\n\nBuka situs ini lewat browser Phantom/Solflare dApp untuk pengalaman penuh!");
+            }
+        });
 
         const navItems = document.querySelectorAll('.nav-item');
         navItems.forEach(item => {
@@ -721,10 +797,6 @@
         document.getElementById('btnCopyInvite').addEventListener('click', () => {
             navigator.clipboard.writeText("https://t.me/GloomCombatbot/app");
             alert("Link Referral disalin ke clipboard!");
-        });
-
-        document.getElementById('btnConnectWallet').addEventListener('click', () => {
-            alert("Sistem integrasi Phantom Wallet akan segera hadir!");
         });
 
         document.getElementById('btnCopyCA').addEventListener('click', () => {
