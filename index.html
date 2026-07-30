@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Gloomy Hamster Gold - Telegram Mini App</title>
     <!-- SDK Resmi Telegram Mini App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -26,20 +26,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            height: -webkit-fill-available;
             overflow: hidden;
         }
 
         .app-container {
             width: 100%;
             max-width: 430px;
-            height: 100vh;
+            height: 100%;
             background: radial-gradient(circle at 50% 10%, #1e1b2e 0%, #08090d 70%);
-            padding: 16px;
+            padding: 12px 16px env(safe-area-inset-bottom, 20px) 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
+            overflow: hidden;
         }
 
         .ambient-glow {
@@ -47,8 +49,8 @@
             top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 280px;
-            height: 280px;
+            width: 240px;
+            height: 240px;
             background: radial-gradient(circle, rgba(243, 156, 18, 0.22) 0%, rgba(0,0,0,0) 70%);
             z-index: 1;
             pointer-events: none;
@@ -62,8 +64,8 @@
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
-            padding: 10px 14px;
-            border-radius: 18px;
+            padding: 8px 12px;
+            border-radius: 16px;
             z-index: 10;
         }
 
@@ -74,8 +76,8 @@
         }
 
         .avatar {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             background: linear-gradient(135deg, #f39c12, #e67e22);
             border-radius: 50%;
             display: flex;
@@ -83,15 +85,16 @@
             justify-content: center;
             font-weight: 800;
             color: #000;
+            font-size: 0.85rem;
         }
 
         .user-info .name {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 700;
         }
 
         .user-info .rank {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #f1c40f;
             font-weight: 600;
         }
@@ -100,21 +103,21 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 12px;
+            gap: 6px;
+            margin-top: 8px;
             z-index: 10;
         }
 
         .stat-card {
             background: rgba(20, 24, 38, 0.7);
             border: 1px solid rgba(241, 196, 15, 0.15);
-            border-radius: 14px;
-            padding: 8px 4px;
+            border-radius: 12px;
+            padding: 6px 4px;
             text-align: center;
         }
 
         .stat-card .label {
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             color: #8b92a5;
             font-weight: 600;
             margin-bottom: 2px;
@@ -122,7 +125,7 @@
 
         .stat-card .val {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.88rem;
+            font-size: 0.82rem;
             font-weight: 800;
             color: #f1c40f;
         }
@@ -144,42 +147,42 @@
 
         .balance-box {
             text-align: center;
-            margin: 10px 0 5px 0;
+            margin: 6px 0 2px 0;
         }
 
         .balance-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             color: #8b92a5;
             font-weight: 700;
         }
 
         .balance-value {
             font-family: 'Outfit', sans-serif;
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 900;
             color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .coin-icon {
-            width: 40px;
-            height: 40px;
+            width: 34px;
+            height: 34px;
             background: linear-gradient(135deg, #ffe066, #f39c12);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 15px rgba(243, 156, 18, 0.6);
+            box-shadow: 0 0 12px rgba(243, 156, 18, 0.6);
             color: #000;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
 
-        /* Clicker Area */
+        /* Clicker Area Responsive */
         .clicker-area {
             display: flex;
             justify-content: center;
@@ -189,12 +192,12 @@
         }
 
         .circle-outer {
-            width: 250px;
-            height: 250px;
+            width: 210px;
+            height: 210px;
             border-radius: 50%;
             background: linear-gradient(145deg, rgba(243, 156, 18, 0.25), rgba(0,0,0,0.5));
-            padding: 8px;
-            box-shadow: 0 0 35px rgba(243, 156, 18, 0.25);
+            padding: 6px;
+            box-shadow: 0 0 25px rgba(243, 156, 18, 0.25);
             cursor: pointer;
             transition: transform 0.05s ease;
         }
@@ -208,26 +211,26 @@
             height: 100%;
             border-radius: 50%;
             background: #0f121d;
-            border: 4px solid #f39c12;
+            border: 3px solid #f39c12;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.9);
             position: relative;
             overflow: hidden;
         }
 
         .hamster-fullbody-svg {
-            width: 170px;
-            height: 170px;
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6));
+            width: 145px;
+            height: 145px;
+            filter: drop-shadow(0 6px 10px rgba(0,0,0,0.6));
             pointer-events: none;
         }
 
         .tap-pop {
             position: absolute;
             font-family: 'Outfit', sans-serif;
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 900;
             color: #ffe066;
             text-shadow: 0 2px 10px rgba(0,0,0,0.9);
@@ -238,7 +241,7 @@
 
         @keyframes popUp {
             0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-70px) scale(1.3); }
+            100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
         }
 
         .page-card {
@@ -253,13 +256,13 @@
 
         .page-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #f1c40f;
             margin-bottom: 8px;
         }
 
         .page-desc {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: #8b92a5;
             margin-bottom: 12px;
         }
@@ -268,20 +271,21 @@
             background: linear-gradient(90deg, #f39c12, #e67e22);
             color: #000;
             border: none;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 10px;
             font-weight: 800;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             cursor: pointer;
             width: 100%;
         }
 
-        /* Bottom Menu */
+        /* Bottom Menu with Safe Spacing */
         .bottom-section {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             z-index: 20;
+            margin-bottom: 10px;
         }
 
         .energy-bar-container {
@@ -289,32 +293,32 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255, 255, 255, 0.05);
-            padding: 8px 14px;
-            border-radius: 14px;
+            padding: 6px 12px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .energy-text {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-weight: 800;
             color: #f1c40f;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .boost-btn {
             background: linear-gradient(90deg, #f39c12, #e67e22);
             color: #000;
             border: none;
-            padding: 8px 14px;
-            border-radius: 10px;
+            padding: 6px 12px;
+            border-radius: 8px;
             font-weight: 800;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .nav-menu {
@@ -322,22 +326,23 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 6px;
             background: rgba(15, 18, 28, 0.98);
-            padding: 8px;
-            border-radius: 18px;
+            padding: 6px;
+            border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            padding: 10px 0;
+            gap: 3px;
+            padding: 8px 0;
             color: #6c757d;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 700;
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: 10px;
             transition: all 0.2s ease;
         }
 
@@ -347,7 +352,7 @@
         }
 
         .nav-item i {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             pointer-events: none;
         }
 
@@ -370,7 +375,7 @@
                     <div class="rank"><i class="fa-solid fa-crown"></i> Gloom Master</div>
                 </div>
             </div>
-            <div style="font-size: 0.75rem; color: #8b92a5; font-weight: 700;">SOLANA</div>
+            <div style="font-size: 0.7rem; color: #8b92a5; font-weight: 700;">SOLANA</div>
         </div>
 
         <!-- Top Stats -->
@@ -454,7 +459,7 @@
             <div class="page-card">
                 <div class="page-title"><i class="fa-solid fa-wallet"></i> Solana Wallet</div>
                 <div class="page-desc">Hubungkan dompet Phantom/Solflare Tuan untuk persiapan Airdrop $GLOOM.</div>
-                <button class="action-btn-card" id="btnConnectWallet" style="margin-bottom: 10px;">Connect Phantom Wallet</button>
+                <button class="action-btn-card" id="btnConnectWallet" style="margin-bottom: 8px;">Connect Phantom Wallet</button>
                 <button class="action-btn-card" id="btnCopyCA" style="background: #2a3042; color: #fff;">Copy Contract Address (CA)</button>
             </div>
         </div>
@@ -493,10 +498,9 @@
     </div>
 
     <script>
-        // Inisialisasi Telegram WebApp
         const tg = window.Telegram ? window.Telegram.WebApp : null;
         if (tg) {
-            tg.expand(); // Buka layar penuh di Telegram
+            tg.expand();
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
                 document.getElementById('userName').innerText = user.first_name + " (CEO)";
@@ -516,7 +520,6 @@
         const profitPerHourValEl = document.getElementById('profitPerHourVal');
         const tapBtn = document.getElementById('tapBtn');
 
-        // Event Listener khusus Touch/Click untuk Telegram
         function addFastClick(element, handler) {
             element.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
@@ -524,7 +527,6 @@
             });
         }
 
-        // Tap Clicker
         addFastClick(tapBtn, (e) => {
             if (energy >= perTap) {
                 score += perTap;
@@ -552,23 +554,19 @@
             }, 600);
         }
 
-        // Sistem Perpindahan Tab Navigasi Bawah
         const navItems = document.querySelectorAll('.nav-item');
         navItems.forEach(item => {
             item.addEventListener('click', function() {
                 const targetTab = this.getAttribute('data-tab');
 
-                // Matikan tab lain
                 document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
 
-                // Aktifkan tab yang diklik
                 document.getElementById(`tab-${targetTab}`).classList.add('active');
                 this.classList.add('active');
             });
         });
 
-        // Tombol Boost
         document.getElementById('boostBtn').addEventListener('click', () => {
             if (score >= 30) {
                 score -= 30;
@@ -580,7 +578,6 @@
             }
         });
 
-        // Tombol Mine
         document.getElementById('btnBuyMining').addEventListener('click', () => {
             if (score >= 100) {
                 score -= 100;
@@ -593,23 +590,20 @@
             }
         });
 
-        // Tombol Friends
         document.getElementById('btnCopyInvite').addEventListener('click', () => {
             navigator.clipboard.writeText("https://t.me/GloomCombatbot/app");
             alert("Link Referral disalin ke clipboard!");
         });
 
-        // Tombol Wallet
         document.getElementById('btnConnectWallet').addEventListener('click', () => {
             alert("Sistem integrasi Phantom Wallet akan segera hadir!");
         });
 
         document.getElementById('btnCopyCA').addEventListener('click', () => {
-            navigator.clipboard.writeText("MASUKKAN_CA_TUAN_DI_SINI");
+            navigator.clipboard.writeText("AWxCsSKmUaChr7fZdeyFwEuYGF5EnTLSxRskPC11pump");
             alert("Contract Address (CA) disalin!");
         });
 
-        // Loop Energi & Profit
         setInterval(() => {
             if (energy < maxEnergy) {
                 energy = Math.min(maxEnergy, energy + 3);
