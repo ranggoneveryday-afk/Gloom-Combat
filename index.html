@@ -267,7 +267,7 @@
             100% { opacity: 0; transform: translateY(-40px) scale(1.2); }
         }
 
-        /* Mining Cards Container */
+        /* Cards Grid & Tasks System */
         .cards-grid {
             display: flex;
             flex-direction: column;
@@ -275,7 +275,7 @@
             width: 100%;
         }
 
-        .mining-card {
+        .task-card {
             background: rgba(20, 24, 38, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
@@ -285,26 +285,44 @@
             align-items: center;
         }
 
-        .card-info {
+        .task-info {
             display: flex;
-            flex-direction: column;
-            gap: 2px;
+            align-items: center;
+            gap: 10px;
             text-align: left;
         }
 
-        .card-title {
-            font-size: 0.78rem;
+        .task-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(241, 196, 15, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f1c40f;
+            font-size: 1rem;
+        }
+
+        .task-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .task-title {
+            font-size: 0.75rem;
             font-weight: 700;
             color: #fff;
         }
 
-        .card-profit {
+        .task-reward {
             font-size: 0.65rem;
-            color: #2ecc71;
-            font-weight: 600;
+            color: #f1c40f;
+            font-weight: 700;
         }
 
-        .card-btn {
+        .task-btn {
             background: linear-gradient(90deg, #f39c12, #e67e22);
             color: #000;
             border: none;
@@ -313,6 +331,13 @@
             font-weight: 800;
             font-size: 0.68rem;
             cursor: pointer;
+        }
+
+        .task-btn.completed {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, 0.4);
+            cursor: default;
         }
 
         .page-card {
@@ -374,7 +399,7 @@
             font-weight: 700;
         }
 
-        /* Bottom Section */
+        /* Bottom Section 5 Nav Items */
         .bottom-section {
             display: flex;
             flex-direction: column;
@@ -417,8 +442,8 @@
 
         .nav-menu {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
             background: rgba(15, 18, 28, 0.98);
             padding: 4px;
             border-radius: 12px;
@@ -432,7 +457,7 @@
             gap: 2px;
             padding: 4px 0;
             color: #6c757d;
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             font-weight: 700;
             cursor: pointer;
             border-radius: 8px;
@@ -445,7 +470,7 @@
         }
 
         .nav-item i {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             pointer-events: none;
         }
 
@@ -536,33 +561,80 @@
         <!-- TAB 2: MINE -->
         <div class="tab-content" id="tab-mine">
             <div class="cards-grid">
-                <div class="mining-card">
-                    <div class="card-info">
-                        <div class="card-title"><i class="fa-solid fa-robot"></i> AI Trading Bot</div>
-                        <div class="card-profit">+100 $GLOOM / jam</div>
+                <div class="task-card">
+                    <div class="task-info">
+                        <div class="task-icon"><i class="fa-solid fa-robot"></i></div>
+                        <div class="task-text">
+                            <div class="task-title">AI Trading Bot</div>
+                            <div class="task-reward">+100 Profit/Jam</div>
+                        </div>
                     </div>
-                    <button class="card-btn" onclick="buyCard(50, 100)">Beli (50)</button>
+                    <button class="task-btn" onclick="buyCard(50, 100)">Beli (50)</button>
                 </div>
 
-                <div class="mining-card">
-                    <div class="card-info">
-                        <div class="card-title"><i class="fa-solid fa-server"></i> Solana Server Node</div>
-                        <div class="card-profit">+300 $GLOOM / jam</div>
+                <div class="task-card">
+                    <div class="task-info">
+                        <div class="task-icon"><i class="fa-solid fa-server"></i></div>
+                        <div class="task-text">
+                            <div class="task-title">Solana Server Node</div>
+                            <div class="task-reward">+300 Profit/Jam</div>
+                        </div>
                     </div>
-                    <button class="card-btn" onclick="buyCard(150, 300)">Beli (150)</button>
+                    <button class="task-btn" onclick="buyCard(150, 300)">Beli (150)</button>
                 </div>
 
-                <div class="mining-card">
-                    <div class="card-info">
-                        <div class="card-title"><i class="fa-solid fa-gem"></i> Staking VIP Pass</div>
-                        <div class="card-profit">+1,000 $GLOOM / jam</div>
+                <div class="task-card">
+                    <div class="task-info">
+                        <div class="task-icon"><i class="fa-solid fa-gem"></i></div>
+                        <div class="task-text">
+                            <div class="task-title">Staking VIP Pass</div>
+                            <div class="task-reward">+1,000 Profit/Jam</div>
+                        </div>
                     </div>
-                    <button class="card-btn" onclick="buyCard(500, 1000)">Beli (500)</button>
+                    <button class="task-btn" onclick="buyCard(500, 1000)">Beli (500)</button>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 3: FRIENDS -->
+        <!-- TAB 3: SOCIAL TASKS -->
+        <div class="tab-content" id="tab-task">
+            <div class="cards-grid">
+                <div class="task-card">
+                    <div class="task-info">
+                        <div class="task-icon"><i class="fa-brands fa-telegram"></i></div>
+                        <div class="task-text">
+                            <div class="task-title">Join Telegram Channel</div>
+                            <div class="task-reward">+5,000 $GLOOM</div>
+                        </div>
+                    </div>
+                    <button class="task-btn" id="btnTaskTg" onclick="doTask('tg', 'https://t.me/GloomCombatbot', 5000)">Jalankan</button>
+                </div>
+
+                <div class="task-card">
+                    <div class="task-info">
+                        <div class="task-icon"><i class="fa-brands fa-x-twitter"></i></div>
+                        <div class="task-text">
+                            <div class="task-title">Follow X / Twitter</div>
+                            <div class="task-reward">+5,000 $GLOOM</div>
+                        </div>
+                    </div>
+                    <button class="task-btn" id="btnTaskX" onclick="doTask('x', 'https://x.com', 5000)">Jalankan</button>
+                </div>
+
+                <div class="task-card">
+                    <div class="task-info">
+                        <div class="task-icon"><i class="fa-solid fa-retweet"></i></div>
+                        <div class="task-text">
+                            <div class="task-title">Retweet Announcement</div>
+                            <div class="task-reward">+3,000 $GLOOM</div>
+                        </div>
+                    </div>
+                    <button class="task-btn" id="btnTaskRt" onclick="doTask('rt', 'https://x.com', 3000)">Jalankan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: FRIENDS -->
         <div class="tab-content" id="tab-friends">
             <div class="page-card">
                 <div class="page-title"><i class="fa-solid fa-users"></i> Undang Teman</div>
@@ -571,7 +643,7 @@
             </div>
         </div>
 
-        <!-- TAB 4: WALLET & WEB3 SOLANA -->
+        <!-- TAB 5: WALLET & WEB3 SOLANA -->
         <div class="tab-content" id="tab-wallet">
             <div class="page-card">
                 <div class="page-title"><i class="fa-solid fa-wallet"></i> Solana Web3 Wallet</div>
@@ -606,7 +678,7 @@
             </div>
         </div>
 
-        <!-- Bottom Menu -->
+        <!-- Bottom Menu 5 Items -->
         <div class="bottom-section">
             <div class="energy-bar-container">
                 <div class="energy-text">
@@ -626,6 +698,10 @@
                 <div class="nav-item" data-tab="mine">
                     <i class="fa-solid fa-pickaxe"></i>
                     <span>Mine</span>
+                </div>
+                <div class="nav-item" data-tab="task">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Task</span>
                 </div>
                 <div class="nav-item" data-tab="friends">
                     <i class="fa-solid fa-users"></i>
@@ -660,6 +736,9 @@
         let lastSaveTime = parseInt(localStorage.getItem('gloom_lastSaveTime')) || Date.now();
         let userWalletAddress = localStorage.getItem('gloom_wallet') || null;
 
+        // Tasks State
+        let completedTasks = JSON.parse(localStorage.getItem('gloom_tasks')) || {};
+
         const scoreEl = document.getElementById('score');
         const energyEl = document.getElementById('energy');
         const perTapValEl = document.getElementById('perTapVal');
@@ -687,7 +766,6 @@
             osc.stop(audioCtx.currentTime + 0.05);
         }
 
-        // Haptic Feedback Function
         function triggerHaptic() {
             if (tg && tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('light');
@@ -706,6 +784,45 @@
             document.getElementById('walletBtnText').innerText = `Connected: ${shortAddr}`;
         }
 
+        function updateTaskUI() {
+            if (completedTasks['tg']) {
+                const btn = document.getElementById('btnTaskTg');
+                btn.innerText = "Selesai ✓";
+                btn.classList.add('completed');
+                btn.onclick = null;
+            }
+            if (completedTasks['x']) {
+                const btn = document.getElementById('btnTaskX');
+                btn.innerText = "Selesai ✓";
+                btn.classList.add('completed');
+                btn.onclick = null;
+            }
+            if (completedTasks['rt']) {
+                const btn = document.getElementById('btnTaskRt');
+                btn.innerText = "Selesai ✓";
+                btn.classList.add('completed');
+                btn.onclick = null;
+            }
+        }
+        updateTaskUI();
+
+        // Task Action Function
+        function doTask(taskId, url, reward) {
+            if (completedTasks[taskId]) return;
+
+            window.open(url, '_blank');
+
+            setTimeout(() => {
+                score += reward;
+                completedTasks[taskId] = true;
+                scoreEl.innerText = score.toLocaleString();
+                updateTaskUI();
+                checkRank();
+                saveData();
+                alert(`Tugas selesai! +${reward.toLocaleString()} $GLOOM ditambahkan ke saldo Tuan!`);
+            }, 2000);
+        }
+
         // Offline Profit Calculator
         const nowTime = Date.now();
         const secondsOffline = Math.floor((nowTime - lastSaveTime) / 1000);
@@ -720,7 +837,6 @@
             }
         }
 
-        // Auto Save Function
         function saveData() {
             localStorage.setItem('gloom_score', score);
             localStorage.setItem('gloom_perTap', perTap);
@@ -728,6 +844,7 @@
             localStorage.setItem('gloom_profitPerHour', profitPerHour);
             localStorage.setItem('gloom_lastDailyClaim', lastDailyClaim);
             localStorage.setItem('gloom_lastSaveTime', Date.now());
+            localStorage.setItem('gloom_tasks', JSON.stringify(completedTasks));
             if (userWalletAddress) {
                 localStorage.setItem('gloom_wallet', userWalletAddress);
             }
