@@ -578,7 +578,7 @@
                 <div class="page-desc">Hubungkan dompet Phantom/Solflare Tuan untuk verifikasi kepemilikan dan persiapan Airdrop $GLOOM.</div>
                 
                 <button class="action-btn-card" id="btnConnectWallet" style="margin-bottom: 8px;">
-                    <i class="fa-solid fa-plug"></i> <span id="walletBtnText">Connect Phantom / Solflare</span>
+                    <i class="fa-solid fa-plug"></i> <span id="walletBtnText">Connect Phantom Wallet</span>
                 </button>
                 
                 <button class="action-btn-card" id="btnCopyCA" style="background: #2a3042; color: #fff;">
@@ -739,10 +739,9 @@
             }
         }
 
-        // Web3 Real Solana Wallet Connect Function
+        // Smart Phantom Wallet Connect + Auto Deep-Link
         document.getElementById('btnConnectWallet').addEventListener('click', async () => {
             const isPhantom = window.solana && window.solana.isPhantom;
-            const isSolflare = window.solflare && window.solflare.isSolflare;
 
             if (isPhantom) {
                 try {
@@ -754,18 +753,14 @@
                 } catch (err) {
                     alert("Koneksi dibatalkan oleh pengguna.");
                 }
-            } else if (isSolflare) {
-                try {
-                    await window.solflare.connect();
-                    userWalletAddress = window.solflare.publicKey.toString();
-                    const shortAddr = userWalletAddress.slice(0, 4) + '...' + userWalletAddress.slice(-4);
-                    document.getElementById('walletBtnText').innerText = `Connected: ${shortAddr}`;
-                    alert(`Solflare Wallet Terhubung!\n\nAddress: ${userWalletAddress}`);
-                } catch (err) {
-                    alert("Koneksi dibatalkan oleh pengguna.");
-                }
             } else {
-                alert("Dompet Solana (Phantom/Solflare) tidak terdeteksi di browser ini.\n\nBuka situs ini lewat browser Phantom/Solflare dApp untuk pengalaman penuh!");
+                // Jika dibuka lewat Chrome/Browser biasa, arahkan otomatis via Phantom Deep Link
+                const appUrl = "https://gloomcombat.netlify.app";
+                const phantomDeepLink = `https://phantom.app/ul/browse/${encodeURIComponent(appUrl)}?ref=${encodeURIComponent(appUrl)}`;
+                
+                if (confirm("Dompet Phantom belum terdeteksi di browser ini.\n\nApakah Tuan ingin membuka game ini langsung di Aplikasi Phantom?")) {
+                    window.location.href = phantomDeepLink;
+                }
             }
         });
 
