@@ -8,7 +8,7 @@
     <!-- Kode Verifikasi Google AdSense Tuan -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2978270645560784" crossorigin="anonymous"></script>
 
-    <!-- Firebase SDK (Google Cloud Realtime Sync) -->
+    <!-- Firebase SDK (Compat Mode untuk Single HTML File) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -657,7 +657,7 @@
             </div>
         </div>
 
-        <!-- TAB 3: GLOBAL LEADERBOARD (GLOBAL ONLINE) -->
+        <!-- TAB 3: GLOBAL LEADERBOARD (LIVE FIREBASE) -->
         <div class="tab-content" id="tab-task">
             <div class="page-card">
                 <div class="page-title"><i class="fa-solid fa-trophy"></i> Global Leaderboard</div>
@@ -665,9 +665,7 @@
                 
                 <div class="leaderboard-list" id="leaderboardContainer">
                     <div class="leaderboard-item">
-                        <div class="leaderboard-rank-num">#1</div>
-                        <div class="leaderboard-user-detail"><b>Tuan (CEO)</b></div>
-                        <div style="color:#f1c40f; font-weight:800;">59.6K</div>
+                        <div style="color:#8b92a5; text-align:center; width:100%;">Memuat Papan Peringkat Dunia...</div>
                     </div>
                 </div>
             </div>
@@ -755,7 +753,22 @@
     </div>
 
     <script>
-        // Unique User ID per Device
+        // FIREBASE INITIALIZATION DENGAN KUNCI TUAN
+        const firebaseConfig = {
+            apiKey: "AIzaSyBqFf8vPTSY2kWvR_drwyLoEtAA7A7pbmk",
+            authDomain: "gloomcombat-948cc.firebaseapp.com",
+            databaseURL: "https://gloomcombat-948cc-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "gloomcombat-948cc",
+            storageBucket: "gloomcombat-948cc.firebasestorage.app",
+            messagingSenderId: "919505900556",
+            appId: "1:919505900556:web:af44cf370d59a54b3cca29",
+            measurementId: "G-1MGPQ2VQR2"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Unique Device / User Identifier
         let userId = localStorage.getItem('gloom_userId');
         if (!userId) {
             userId = 'user_' + Math.random().toString(36).substr(2, 9);
@@ -764,7 +777,7 @@
 
         const tg = window.Telegram ? window.Telegram.WebApp : null;
 
-        // Variable Game State
+        // Game Variables
         let score = parseInt(localStorage.getItem('gloom_score')) || 0;
         let perTap = parseInt(localStorage.getItem('gloom_perTap')) || 1;
         let energy = parseInt(localStorage.getItem('gloom_energy')) || 1000;
@@ -794,7 +807,7 @@
         const nextRankValEl = document.getElementById('nextRankVal');
         const tapBtn = document.getElementById('tapBtn');
 
-        // Web Audio Synthesizer SFX
+        // Audio SFX Synthesizer
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTapSound() {
             if (audioCtx.state === 'suspended') {
@@ -875,6 +888,7 @@
         }
         checkRank();
 
+        // SAVE DATA TO LOCAL & CLOUD FIREBASE
         function saveData() {
             localStorage.setItem('gloom_score', score);
             localStorage.setItem('gloom_perTap', perTap);
@@ -885,7 +899,47 @@
             if (userWalletAddress) {
                 localStorage.setItem('gloom_wallet', userWalletAddress);
             }
+
+            // Sync Database Realtime Cloud Global
+            database.ref('players/' + userId).set({
+                name: customName,
+                score: score,
+                profitPerHour: profitPerHour,
+                updatedAt: Date.now()
+            });
         }
+
+        // FETCH REALTIME GLOBAL LEADERBOARD FROM FIREBASE
+        function listenGlobalLeaderboard() {
+            database.ref('players').orderByChild('score').limitToLast(10).on('value', (snapshot) => {
+                const container = document.getElementById('leaderboardContainer');
+                container.innerHTML = '';
+
+                let players = [];
+                snapshot.forEach((child) => {
+                    players.push(child.val());
+                });
+
+                players.reverse(); // Urutkan dari koin terbesar
+
+                if (players.length === 0) {
+                    container.innerHTML = '<div style="color:#8b92a5; text-align:center;">Belum ada data pemain online.</div>';
+                    return;
+                }
+
+                players.forEach((p, idx) => {
+                    const item = document.createElement('div');
+                    item.classList.add('leaderboard-item');
+                    item.innerHTML = `
+                        <div class="leaderboard-rank-num">#${idx + 1}</div>
+                        <div class="leaderboard-user-detail"><b>${p.name || 'Anonymous'}</b></div>
+                        <div style="color:#f1c40f; font-weight:800;">${(p.score || 0).toLocaleString()}</div>
+                    `;
+                    container.appendChild(item);
+                });
+            });
+        }
+        listenGlobalLeaderboard();
 
         tapBtn.addEventListener('pointerdown', (e) => {
             e.preventDefault();
