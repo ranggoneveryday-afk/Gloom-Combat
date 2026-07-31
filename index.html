@@ -8,6 +8,10 @@
     <!-- Kode Verifikasi Google AdSense Tuan -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2978270645560784" crossorigin="anonymous"></script>
 
+    <!-- Firebase SDK (Google Cloud Realtime Sync) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
     <!-- Solana Web3 SDK -->
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
@@ -397,7 +401,41 @@
             width: 100%;
         }
 
-        /* Tokenomics Box */
+        /* Leaderboard Global UI */
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .leaderboard-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 8px 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+        }
+
+        .leaderboard-rank-num {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: #f1c40f;
+            width: 24px;
+        }
+
+        .leaderboard-user-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
         .tokenomics-box {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -507,16 +545,16 @@
     <div class="app-container">
         <div class="ambient-glow"></div>
 
-        <!-- Header (Click to Edit Profile) -->
+        <!-- Header -->
         <div class="header-section">
-            <div class="user-profile" id="btnEditProfile" title="Klik untuk edit profil">
+            <div class="user-profile" id="btnEditProfile">
                 <div class="avatar" id="userAvatar">T<i class="fa-solid fa-pen avatar-edit-icon"></i></div>
                 <div class="user-info">
                     <div class="name"><span id="userName">Tuan (CEO)</span> <i class="fa-solid fa-pencil" style="font-size:0.55rem; color:#8b92a5;"></i></div>
                     <div class="rank" id="userRank"><i class="fa-solid fa-crown"></i> Bronze CEO</div>
                 </div>
             </div>
-            <div style="font-size: 0.65rem; color: #8b92a5; font-weight: 700;">SOLANA</div>
+            <div style="font-size: 0.65rem; color: #2ecc71; font-weight: 700;"><i class="fa-solid fa-globe"></i> ONLINE</div>
         </div>
 
         <!-- Top Stats -->
@@ -619,40 +657,18 @@
             </div>
         </div>
 
-        <!-- TAB 3: SOCIAL TASKS -->
+        <!-- TAB 3: GLOBAL LEADERBOARD (GLOBAL ONLINE) -->
         <div class="tab-content" id="tab-task">
-            <div class="cards-grid">
-                <div class="task-card">
-                    <div class="task-info">
-                        <div class="task-icon"><i class="fa-brands fa-telegram"></i></div>
-                        <div class="task-text">
-                            <div class="task-title">Join Telegram Channel</div>
-                            <div class="task-reward">+5,000 $GLOOM</div>
-                        </div>
+            <div class="page-card">
+                <div class="page-title"><i class="fa-solid fa-trophy"></i> Global Leaderboard</div>
+                <div class="page-desc">Pemain terbaik dengan saldo $GLOOM terbanyak di seluruh dunia!</div>
+                
+                <div class="leaderboard-list" id="leaderboardContainer">
+                    <div class="leaderboard-item">
+                        <div class="leaderboard-rank-num">#1</div>
+                        <div class="leaderboard-user-detail"><b>Tuan (CEO)</b></div>
+                        <div style="color:#f1c40f; font-weight:800;">59.6K</div>
                     </div>
-                    <button class="task-btn" id="btnTaskTg" onclick="doTask('tg', 'https://t.me/GloomySadHamster', 5000)">Jalankan</button>
-                </div>
-
-                <div class="task-card">
-                    <div class="task-info">
-                        <div class="task-icon"><i class="fa-brands fa-x-twitter"></i></div>
-                        <div class="task-text">
-                            <div class="task-title">Follow X / Twitter</div>
-                            <div class="task-reward">+5,000 $GLOOM</div>
-                        </div>
-                    </div>
-                    <button class="task-btn" id="btnTaskX" onclick="doTask('x', 'https://x.com/CoinDongo16', 5000)">Jalankan</button>
-                </div>
-
-                <div class="task-card">
-                    <div class="task-info">
-                        <div class="task-icon"><i class="fa-solid fa-retweet"></i></div>
-                        <div class="task-text">
-                            <div class="task-title">Retweet Announcement</div>
-                            <div class="task-reward">+3,000 $GLOOM</div>
-                        </div>
-                    </div>
-                    <button class="task-btn" id="btnTaskRt" onclick="doTask('rt', 'https://x.com/CoinDongo16', 3000)">Jalankan</button>
                 </div>
             </div>
         </div>
@@ -723,8 +739,8 @@
                     <span>Mine</span>
                 </div>
                 <div class="nav-item" data-tab="task">
-                    <i class="fa-solid fa-list-check"></i>
-                    <span>Task</span>
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Top</span>
                 </div>
                 <div class="nav-item" data-tab="friends">
                     <i class="fa-solid fa-users"></i>
@@ -739,6 +755,13 @@
     </div>
 
     <script>
+        // Unique User ID per Device
+        let userId = localStorage.getItem('gloom_userId');
+        if (!userId) {
+            userId = 'user_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('gloom_userId', userId);
+        }
+
         const tg = window.Telegram ? window.Telegram.WebApp : null;
 
         // Variable Game State
@@ -751,7 +774,6 @@
         let lastSaveTime = parseInt(localStorage.getItem('gloom_lastSaveTime')) || Date.now();
         let userWalletAddress = localStorage.getItem('gloom_wallet') || null;
 
-        // Custom Profile State
         let customName = localStorage.getItem('gloom_customName') || "Tuan (CEO)";
         let customAvatar = localStorage.getItem('gloom_customAvatar') || "T";
 
@@ -763,9 +785,6 @@
                 customAvatar = user.first_name.charAt(0).toUpperCase();
             }
         }
-
-        // Tasks State
-        let completedTasks = JSON.parse(localStorage.getItem('gloom_tasks')) || {};
 
         const scoreEl = document.getElementById('score');
         const energyEl = document.getElementById('energy');
@@ -802,14 +821,12 @@
             }
         }
 
-        // Apply Profile Customization
         function applyProfileDisplay() {
             document.getElementById('userName').innerText = customName;
             document.getElementById('userAvatar').innerHTML = `${customAvatar}<i class="fa-solid fa-pen avatar-edit-icon"></i>`;
         }
         applyProfileDisplay();
 
-        // Edit Profile Event
         document.getElementById('btnEditProfile').addEventListener('click', () => {
             const newName = prompt("Masukkan Nama CEO / Player Tuan:", customName);
             if (newName && newName.trim() !== "") {
@@ -821,11 +838,11 @@
                 localStorage.setItem('gloom_customName', customName);
                 localStorage.setItem('gloom_customAvatar', customAvatar);
                 applyProfileDisplay();
+                saveData();
                 alert("Profil CEO berhasil diperbarui!");
             }
         });
 
-        // Load Initial Saved Display
         scoreEl.innerText = score.toLocaleString();
         perTapValEl.innerText = `+${perTap}`;
         profitPerHourValEl.innerText = `+${profitPerHour.toLocaleString()}`;
@@ -835,45 +852,6 @@
             document.getElementById('walletBtnText').innerText = `Connected: ${shortAddr}`;
         }
 
-        function updateTaskUI() {
-            if (completedTasks['tg']) {
-                const btn = document.getElementById('btnTaskTg');
-                btn.innerText = "Selesai ✓";
-                btn.classList.add('completed');
-                btn.onclick = null;
-            }
-            if (completedTasks['x']) {
-                const btn = document.getElementById('btnTaskX');
-                btn.innerText = "Selesai ✓";
-                btn.classList.add('completed');
-                btn.onclick = null;
-            }
-            if (completedTasks['rt']) {
-                const btn = document.getElementById('btnTaskRt');
-                btn.innerText = "Selesai ✓";
-                btn.classList.add('completed');
-                btn.onclick = null;
-            }
-        }
-        updateTaskUI();
-
-        function doTask(taskId, url, reward) {
-            if (completedTasks[taskId]) return;
-
-            window.open(url, '_blank');
-
-            setTimeout(() => {
-                score += reward;
-                completedTasks[taskId] = true;
-                scoreEl.innerText = score.toLocaleString();
-                updateTaskUI();
-                checkRank();
-                saveData();
-                alert(`Tugas selesai! +${reward.toLocaleString()} $GLOOM ditambahkan ke saldo Tuan!`);
-            }, 2000);
-        }
-
-        // Hard Core Scaled Rank System
         function checkRank() {
             if (score >= 100000000) {
                 userRankEl.innerHTML = `<i class="fa-solid fa-crown" style="color: #00DEF6;"></i> Solana Lord`;
@@ -897,20 +875,6 @@
         }
         checkRank();
 
-        // Offline Profit Calculator
-        const nowTime = Date.now();
-        const secondsOffline = Math.floor((nowTime - lastSaveTime) / 1000);
-        if (profitPerHour > 0 && secondsOffline > 10) {
-            const offlineEarned = Math.floor((profitPerHour / 3600) * secondsOffline);
-            if (offlineEarned > 0) {
-                score += offlineEarned;
-                scoreEl.innerText = score.toLocaleString();
-                setTimeout(() => {
-                    alert(`Selamat datang kembali Tuan!\n\nHamster Mining Rig Tuan menghasilkan +${offlineEarned.toLocaleString()} $GLOOM saat Tuan offline!`);
-                }, 500);
-            }
-        }
-
         function saveData() {
             localStorage.setItem('gloom_score', score);
             localStorage.setItem('gloom_perTap', perTap);
@@ -918,7 +882,6 @@
             localStorage.setItem('gloom_profitPerHour', profitPerHour);
             localStorage.setItem('gloom_lastDailyClaim', lastDailyClaim);
             localStorage.setItem('gloom_lastSaveTime', Date.now());
-            localStorage.setItem('gloom_tasks', JSON.stringify(completedTasks));
             if (userWalletAddress) {
                 localStorage.setItem('gloom_wallet', userWalletAddress);
             }
@@ -984,7 +947,6 @@
             }
         }
 
-        // Direct Native Intent & Connect Wallet
         document.getElementById('btnConnectWallet').addEventListener('click', async () => {
             const isPhantom = window.solana && window.solana.isPhantom;
 
